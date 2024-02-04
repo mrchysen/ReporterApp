@@ -1,0 +1,13 @@
+{
+  "Location": {
+    "X": 200,
+    "Y": 150
+  },
+  "Size": {
+    "IsEmpty": false,
+    "Width": 800,
+    "Height": 450
+  },
+  "State": 0,
+  "PathOfCarsFolder": ""
+}
