@@ -9,6 +9,6 @@ Pictures of result:
 
 [logo]: https://github.com/mrchysen/ReporterApp/blob/master/WpfApp1/ImgToShow/im_1.png "im_1"
 
-![alt-текст][logo]
+![alt-текст][logo1]
 
-[logo]: https://github.com/mrchysen/ReporterApp/blob/master/WpfApp1/ImgToShow/im_2.png "im_2"
+[logo1]: https://github.com/mrchysen/ReporterApp/blob/master/WpfApp1/ImgToShow/im_2.png "im_2"
