@@ -7,4 +7,8 @@ It is 0.1 alpha version, because It needs to implement car page, where I will be
 Pictures of result:
 ![alt-текст][logo]
 
-[logo]: https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Текст заголовка логотипа 2"
+[logo]: https://github.com/mrchysen/ReporterApp/blob/master/WpfApp1/ImgToShow/im_1.png "im_1"
+
+![alt-текст][logo]
+
+[logo]: https://github.com/mrchysen/ReporterApp/blob/master/WpfApp1/ImgToShow/im_2.png "im_2"
