@@ -1,24 +1,14 @@
-﻿using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows;
 using WpfApp1.Pages;
-using KrasTechMontacApplication.Logic.FileClasses;
-using KrasTechMontacApplication.Logic.Reports;
-using KrasTechMontacApplication.Logic.Cars;
 using System.IO;
 using System.Text.Json;
 using Reporter.Logic.Configuration;
 using System.Diagnostics;
-using System.DirectoryServices.ActiveDirectory;
 using Reporter.Pages;
 using Microsoft.Win32;
+using Core.Managers;
+using Core.Reports;
+using Core.Cars.FileAccess;
 
 
 namespace WpfApp1
@@ -29,8 +19,8 @@ namespace WpfApp1
     public partial class MainWindow : Window
     {
         // Manager keeps all data
-        protected FileManager Manager;
-        protected WindowConfiguration Configuration;
+        private FileManager Manager;
+        private WindowConfiguration Configuration;
 
         public MainWindow()
         {
@@ -41,7 +31,12 @@ namespace WpfApp1
 
             // Default manager. It is empty for default
             Manager = new();
-            Manager.Cars = CarReader.ReadOnlyNumbers(Directory.GetCurrentDirectory() + "\\cars.txt");
+
+            var result = new CarReader().ReadOnlyNumbers(Directory.GetCurrentDirectory() + "\\cars.txt");
+
+            InfoObjectHandling(result);
+
+            Manager.Cars = result.Cars;
 
             // First page - default page
             PageHandler.Content = new CreatePage(this);
@@ -57,35 +52,36 @@ namespace WpfApp1
         #region Start Configuration Methods
         protected void ConfigureWindow()
         {
-            string path = string.Concat(Directory.GetCurrentDirectory(), "\\window.config.json");
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "window.config.json");
 
-            if (File.Exists(path))
+            if (!File.Exists(path))
             {
-                string json = File.ReadAllText(path);
-                Debug.WriteLine("Нашёл файл");
-                try
-                {
-                    Configuration = JsonSerializer.Deserialize<WindowConfiguration>(json, new JsonSerializerOptions());
+                SetDefaultWindowConfiguration();
+                return;
+            }
 
-                    this.WindowState = Configuration.State;
-                    this.Left = Configuration.Location.X;
-                    this.Top = Configuration.Location.Y;
-                    this.Width = Configuration.Size.Width;
-                    this.Height = Configuration.Size.Height;
+            string json = File.ReadAllText(path);
+            
+            Debug.WriteLine("Нашёл файл");
+            try
+            {
+                Configuration = JsonSerializer.Deserialize<WindowConfiguration>(json);
 
-                    if (string.IsNullOrEmpty(Configuration.PathOfCarsFolder))
-                    {
-                        Configuration.PathOfCarsFolder = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "\\CarsFolder");
-                    }
-                }
-                catch (Exception ex) 
+                this.WindowState = Configuration.State;
+                this.Left = Configuration.Location.X;
+                this.Top = Configuration.Location.Y;
+                this.Width = Configuration.Size.Width;
+                this.Height = Configuration.Size.Height;
+
+                if (string.IsNullOrEmpty(Configuration.PathOfCarsFolder))
                 {
-                    SetDefaultWindowConfiguration();
+                    Configuration.PathOfCarsFolder = Path.Combine(Directory.GetCurrentDirectory(), "CarsFolder");
                 }
             }
-            else
+            catch (Exception ex) 
             {
-                // Set Default Configuration \\
+                ErrorHandling("Ошибка: " + ex.Message);
+
                 SetDefaultWindowConfiguration();
             }
         }
@@ -98,12 +94,7 @@ namespace WpfApp1
             this.Width = this.MinWidth;
             this.Height = this.MinHeight;
 
-            Configuration = new()
-            {
-                State = WindowState.Normal,
-                Size = new Size(this.Width, this.Height),
-                Location = new Point(this.Left, this.Top),
-            };
+            Configuration = new((int)MinWidth, (int)MinHeight);
         }
 
         protected void SaveWindowConfiguration()
@@ -128,7 +119,11 @@ namespace WpfApp1
             { 
                 string filePath = fileDiag.FileName;
                 
-                Manager.Cars = CarReader.ReadJson(filePath);
+                var result = new CarReader().ReadJson(filePath);
+
+                InfoObjectHandling(result);
+
+                Manager.Cars = result.Cars;
 
                 PageHandler.Content = new CreatePage(this);
             }
@@ -142,10 +137,12 @@ namespace WpfApp1
         }
         private void SaveFileButton_Click(object sender, RoutedEventArgs e)
         {
-            // code that saves our report/car files
-            string directoryPath = string.Concat(Configuration.PathOfCarsFolder, "\\", Manager.Date.Year, "\\", $"{Manager.Date.Month}");
-            string path = string.Concat(directoryPath, "\\", $"{Manager.Date.ToShortDateString()}.car.json");
-
+            // code that saves report/car files
+            string directoryPath = Path.Combine(
+                Configuration.PathOfCarsFolder, 
+                Manager.Date.Year.ToString(), 
+                Manager.Date.Month.ToString());
+            string path = Path.Combine(directoryPath, $"{Manager.Date.ToShortDateString()}.car.json");
 
             if (!Directory.Exists(directoryPath))
             {
@@ -162,7 +159,9 @@ namespace WpfApp1
                 }
             }
 
-            CarWriter.WriteJson(path, Manager.Cars!);
+            var infoObject = new CarWriter().WriteJson(Manager.Cars!, path);
+
+            InfoObjectHandling(infoObject);
 
             MessageBox.Show("Файл сохранён.", "Информация", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
@@ -197,7 +196,11 @@ namespace WpfApp1
 
             if (Result == MessageBoxResult.Yes)
             {
-                Manager.Cars = CarReader.ReadOnlyNumbers(Directory.GetCurrentDirectory() + "\\cars.txt");
+                var result = new CarReader().ReadOnlyNumbers(Directory.GetCurrentDirectory() + "\\cars.txt");
+
+                InfoObjectHandling(result);
+
+                Manager.Cars = result.Cars;
 
                 // refresh view if it is ReportPage
                 if (PageHandler.Content is ReportPage content)
@@ -216,12 +219,31 @@ namespace WpfApp1
             PageHandler.Content = new ReportPage(Manager);
         }
 
-        public void SetAllEnable()
+        private void SetAllEnable()
         {
             MenuFileButton.IsEnabled = true;
             CopyFileMenuButton.IsEnabled = true;
             SaveFileButton.IsEnabled = true;
         }
+
+        private void InfoObjectHandling(InfoObject result)
+        {
+            if (result.Result == FileResult.Error ||
+                result.Result == FileResult.Info)
+            {
+                MessageBox.Show(
+                    result.Message,
+                    result.Result.ToString(),
+                    MessageBoxButton.OK,
+                    MessageBoxImage.None);
+            }
+        }
+
+        private void ErrorHandling(string message) => MessageBox.Show(
+                    message,
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.None);
 
         #region Window events
 

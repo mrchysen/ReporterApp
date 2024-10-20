@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace KrasTechMontacApplication.Logic.Reports;
+namespace Core.Reports;
 
 /// <summary>
 /// Report class

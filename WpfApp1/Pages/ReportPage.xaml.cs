@@ -1,4 +1,4 @@
-﻿using KrasTechMontacApplication.Logic.FileClasses;
+﻿using Core.Managers;
 using Reporter.Logic.ValueConverters;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,11 +12,12 @@ namespace WpfApp1.Pages
     /// </summary>
     public partial class ReportPage : Page
     {
-        protected FileManager _Manager;
+        private FileManager _manager;
+
         public ReportPage(FileManager manager)
         {
             InitializeComponent();
-            Manager = manager;
+            _manager = manager;
             SetBindings();
         }
 
@@ -24,13 +25,13 @@ namespace WpfApp1.Pages
         {
             // TextBox - Text\\
             Binding TextBoxBinding = new Binding();
-            TextBoxBinding.Source = _Manager.Iterator;
+            TextBoxBinding.Source = _manager.Iterator;
             TextBoxBinding.Path = new PropertyPath("GetCars");
-            TextBoxBinding.Converter = new ReportConverter(_Manager.Builder, _Manager.Date);
+            TextBoxBinding.Converter = new ReportConverter(_manager.Builder, _manager.Date);
             TextBoxBinding.Mode = BindingMode.OneWay;
             TextBox.SetBinding(TextBox.TextProperty, TextBoxBinding);
         }
 
-        protected FileManager Manager { set { _Manager = value; CarIteratorComponent.Iterator = _Manager.Iterator; } }
+        protected FileManager Manager { set { _manager = value; CarIteratorComponent.Iterator = _manager.Iterator; } }
     }
 }

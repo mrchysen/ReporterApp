@@ -1,9 +1,9 @@
-﻿using KrasTechMontacApplication.Logic.Reports;
-using KrasTechMontacApplication.Logic.Cars;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Core.Cars;
+using Core.Reports;
 
-namespace KrasTechMontacApplication.Logic.FileClasses;
+namespace Core.Managers;
 
 public class FileManager : INotifyPropertyChanged
 {

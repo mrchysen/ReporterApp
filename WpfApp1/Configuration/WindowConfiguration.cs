@@ -9,6 +9,16 @@ public class WindowConfiguration : INotifyPropertyChanged
 {
     protected string _PathOfCarsFolder = Directory.GetCurrentDirectory() + "\\CarsFolder";
 
+
+    public WindowConfiguration() { }
+
+    public WindowConfiguration(int width, int height) 
+    {
+        State = WindowState.Normal;
+        Size = new Size(width, height);
+        Location = new Point(100, 100);
+    }
+
     public Point Location { get; set; }
     public Size Size { get; set; }
     public WindowState State {  get; set; }
@@ -25,7 +35,7 @@ public class WindowConfiguration : INotifyPropertyChanged
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+    private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
