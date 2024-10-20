@@ -1,19 +1,8 @@
-﻿using KrasTechMontacApplication.Logic.Cars;
+﻿using Core.Cars;
 using Reporter.ModalWindows;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using WpfApp1.Logic.ValueConverters;
 using WpfApp1.ModalWindows;
 
@@ -147,23 +136,23 @@ namespace WpfApp1.Elements
                 return car.AddInformation.Count > 0;
             }));
             AddInfoButton.SetBinding(Button.BackgroundProperty, AddInfoButtonBindingColor);
-
         }
-
-
 
         private void RightButton_Click(object sender, RoutedEventArgs e)
         {
-            _Iterator.Next();
+            _Iterator?.Next();
         }
 
         private void LeftButton_Click(object sender, RoutedEventArgs e)
         {
-            _Iterator.Back();
+            _Iterator?.Back();
         }
 
         private void FuelButton_Click(object sender, RoutedEventArgs e)
         {
+            if (_Iterator == null)
+                return;
+
             FuelDialog fuelDialog = new FuelDialog(_Iterator.GetCar);
 
             fuelDialog.ShowDialog();
@@ -173,6 +162,9 @@ namespace WpfApp1.Elements
 
         private void ScreenButton_Click(object sender, RoutedEventArgs e)
         {
+            if (_Iterator == null)
+                return;
+
             Car car = _Iterator.GetCar;
 
             if(car.WasScreen)
@@ -185,6 +177,9 @@ namespace WpfApp1.Elements
 
         private void ET24kmButton_Click(object sender, RoutedEventArgs e)
         {
+            if (_Iterator == null)
+                return;
+
             Car car = _Iterator.GetCar;
 
             if (car.Was24kmET)
@@ -197,6 +192,9 @@ namespace WpfApp1.Elements
 
         private void ParkingButton_Click(object sender, RoutedEventArgs e)
         {
+            if (_Iterator == null)
+                return;
+
             ParkingDialog parkingDialog = new ParkingDialog(_Iterator.GetCar);
 
             parkingDialog.ShowDialog();
@@ -206,6 +204,9 @@ namespace WpfApp1.Elements
 
         private void WorkedButton_Click(object sender, RoutedEventArgs e)
         {
+            if (_Iterator == null)
+                return;
+
             Car car = _Iterator.GetCar;
 
             if (car.IsWorked)
@@ -218,6 +219,9 @@ namespace WpfApp1.Elements
 
         private void AddInfoButton_Click(object sender, RoutedEventArgs e)
         {
+            if (_Iterator == null)
+                return;
+
             AddInfoDialog addInfoDialog = new AddInfoDialog(_Iterator.GetCar);
 
             addInfoDialog.ShowDialog();

@@ -1,8 +1,8 @@
-﻿using KrasTechMontacApplication.Logic.Cars;
+﻿using Core.Cars;
 using System.Text;
 
 
-namespace KrasTechMontacApplication.Logic.Reports;
+namespace Core.Reports;
 
 public class StandartReportBuilder : IReportBuilder
 {

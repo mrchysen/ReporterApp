@@ -1,6 +1,6 @@
-﻿using KrasTechMontacApplication.Logic.Cars;
+﻿using Core.Cars;
 
-namespace KrasTechMontacApplication.Logic.Reports;
+namespace Core.Reports;
 
 public class GasAndStandartReportBuilder : IReportBuilder
 {

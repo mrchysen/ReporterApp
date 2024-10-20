@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Core.Cars;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
-using System.Diagnostics;
-using KrasTechMontacApplication.Logic.Cars;
-
 
 namespace WpfApp1.Logic.ValueConverters
 {
@@ -16,7 +9,6 @@ namespace WpfApp1.Logic.ValueConverters
         protected Predicate<Car> Predicate;
         protected string TruePredicateText;
         protected string FalsePredicateText;
-
 
         public PredicatConverter(Predicate<Car> predicate, string TruePredicateText, string FalsePredicateText)
         {

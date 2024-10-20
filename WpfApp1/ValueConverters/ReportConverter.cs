@@ -1,5 +1,5 @@
-﻿using KrasTechMontacApplication.Logic.Cars;
-using KrasTechMontacApplication.Logic.Reports;
+﻿using Core.Cars;
+using Core.Reports;
 using System.Globalization;
 using System.Windows.Data;
 

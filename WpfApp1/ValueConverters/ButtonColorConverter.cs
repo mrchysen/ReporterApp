@@ -1,11 +1,5 @@
-﻿using KrasTechMontacApplication.Logic.Cars;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using Core.Cars;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Media;
 using Color = System.Windows.Media.Color;

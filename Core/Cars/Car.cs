@@ -1,4 +1,4 @@
-﻿namespace KrasTechMontacApplication.Logic.Cars;
+﻿namespace Core.Cars;
 
 public class Car
 {
