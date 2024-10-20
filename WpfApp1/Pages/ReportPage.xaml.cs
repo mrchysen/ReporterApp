@@ -17,7 +17,9 @@ namespace WpfApp1.Pages
         public ReportPage(FileManager manager)
         {
             InitializeComponent();
-            _manager = manager;
+
+            Manager = manager;
+
             SetBindings();
         }
 
@@ -32,6 +34,12 @@ namespace WpfApp1.Pages
             TextBox.SetBinding(TextBox.TextProperty, TextBoxBinding);
         }
 
-        protected FileManager Manager { set { _manager = value; CarIteratorComponent.Iterator = _manager.Iterator; } }
+        protected FileManager Manager 
+        { 
+            set { 
+                _manager = value; 
+                CarIteratorComponent.Iterator = _manager.Iterator; 
+            } 
+        }
     }
 }
