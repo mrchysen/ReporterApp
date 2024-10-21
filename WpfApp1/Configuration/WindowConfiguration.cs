@@ -12,10 +12,10 @@ public class WindowConfiguration : INotifyPropertyChanged
 
     public WindowConfiguration() { }
 
-    public WindowConfiguration(int width, int height) 
+    public WindowConfiguration(int minWidth, int minHeight) 
     {
         State = WindowState.Normal;
-        Size = new Size(width, height);
+        Size = new Size(minWidth, minHeight);
         Location = new Point(100, 100);
     }
 

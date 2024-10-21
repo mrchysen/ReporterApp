@@ -101,8 +101,12 @@ namespace WpfApp1
         {
             string json = JsonSerializer.Serialize(Configuration);
 
-            using StreamWriter sw = new StreamWriter(string.Concat(Directory.GetCurrentDirectory(), "\\window.config.json"), false);
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "window.config.json");
+
+            using StreamWriter sw = new StreamWriter(path, false);
                 sw.WriteLine(json);
+
+            sw.Close();
         }
 
         #endregion
