@@ -49,7 +49,7 @@
             
             <MenuItem Header="Меню" Style="{StaticResource LeftBorder}" x:Name="MenuFileButton">
                 <MenuItem Click="FilePageItem_Click" Header="Файла" Style="{StaticResource BlackForeground}"/>
-                <MenuItem  Header="Машин" Style="{StaticResource BlackForeground}"/>
+                <MenuItem Click="CarNumberItem_Click"  Header="Машин" Style="{StaticResource BlackForeground}"/>
                 <MenuItem Click="ReportPageItem_Click" Header="Отчёта" Style="{StaticResource BlackForeground}"/>
                 <Separator />
                 <MenuItem  Header="Отчистить машины" Click="ResetCarButton_Click" Style="{StaticResource BlackForeground}"/>
