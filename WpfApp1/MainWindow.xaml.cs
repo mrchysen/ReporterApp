@@ -8,7 +8,8 @@ using Reporter.Pages;
 using Microsoft.Win32;
 using Core.Managers;
 using Core.Reports;
-using Core.Cars.FileAccess;
+using DAL.FileAccess;
+using Core.Cars;
 
 
 namespace WpfApp1
@@ -19,8 +20,9 @@ namespace WpfApp1
     public partial class MainWindow : Window
     {
         // Manager keeps all data
-        private FileManager Manager;
-        private WindowConfiguration Configuration;
+        private FileManager _manager;
+
+        private WindowConfiguration _configuration;
 
         public MainWindow()
         {
@@ -30,13 +32,13 @@ namespace WpfApp1
             ConfigureWindow();
 
             // Default manager. It is empty for default
-            Manager = new();
+            _manager = new();
 
             var result = new CarReader().ReadOnlyNumbers(Directory.GetCurrentDirectory() + "\\cars.txt");
 
             InfoObjectHandling(result);
 
-            Manager.Cars = result.Cars;
+            _manager.Cars = result.Cars;
 
             // First page - default page
             PageHandler.Content = new CreatePage(this);
@@ -65,17 +67,18 @@ namespace WpfApp1
             Debug.WriteLine("Нашёл файл");
             try
             {
-                Configuration = JsonSerializer.Deserialize<WindowConfiguration>(json);
+                _configuration = JsonSerializer.Deserialize<WindowConfiguration>(json) 
+                    ?? SetDefaultWindowConfiguration();
 
-                this.WindowState = Configuration.State;
-                this.Left = Configuration.Location.X;
-                this.Top = Configuration.Location.Y;
-                this.Width = Configuration.Size.Width;
-                this.Height = Configuration.Size.Height;
+                this.WindowState = _configuration.State;
+                this.Left = _configuration.Location.X;
+                this.Top = _configuration.Location.Y;
+                this.Width = _configuration.Size.Width;
+                this.Height = _configuration.Size.Height;
 
-                if (string.IsNullOrEmpty(Configuration.PathOfCarsFolder))
+                if (string.IsNullOrEmpty(_configuration.PathOfCarsFolder))
                 {
-                    Configuration.PathOfCarsFolder = Path.Combine(Directory.GetCurrentDirectory(), "CarsFolder");
+                    _configuration.PathOfCarsFolder = Path.Combine(Directory.GetCurrentDirectory(), "CarsFolder");
                 }
             }
             catch (Exception ex) 
@@ -86,7 +89,7 @@ namespace WpfApp1
             }
         }
 
-        protected void SetDefaultWindowConfiguration()
+        protected WindowConfiguration SetDefaultWindowConfiguration()
         {
             this.WindowState = WindowState.Normal;
             this.Left = 100;
@@ -94,12 +97,25 @@ namespace WpfApp1
             this.Width = this.MinWidth;
             this.Height = this.MinHeight;
 
-            Configuration = new((int)MinWidth, (int)MinHeight);
+            _configuration = new((int)MinWidth, (int)MinHeight);
+
+            return _configuration;
+        }
+
+        protected WindowConfiguration GetCurrentConfiguration()
+        {
+            _configuration.State = WindowState;
+            _configuration.Location = new(this.Left, this.Top);
+            _configuration.Size = new(this.Width, this.Height);
+
+            return _configuration;
         }
 
         protected void SaveWindowConfiguration()
         {
-            string json = JsonSerializer.Serialize(Configuration);
+            _configuration = GetCurrentConfiguration();
+
+            string json = JsonSerializer.Serialize(_configuration);
 
             var path = Path.Combine(Directory.GetCurrentDirectory(), "window.config.json");
 
@@ -116,7 +132,7 @@ namespace WpfApp1
         {
             // code of openning file with report
             OpenFileDialog fileDiag = new();
-            fileDiag.InitialDirectory = Configuration.PathOfCarsFolder;
+            fileDiag.InitialDirectory = _configuration.PathOfCarsFolder;
             fileDiag.Filter = "(*.json)|*.json|All files (*.*)|*.*";
 
             if(fileDiag.ShowDialog() == true) 
@@ -127,7 +143,7 @@ namespace WpfApp1
 
                 InfoObjectHandling(result);
 
-                Manager.Cars = result.Cars;
+                _manager.Cars = result.Cars;
 
                 PageHandler.Content = new CreatePage(this);
             }
@@ -135,7 +151,7 @@ namespace WpfApp1
         private void CreateFileButton_Click(object sender, RoutedEventArgs e)
         {
             // code of creating new file with reports
-            Manager = new FileManager(Manager);
+            _manager = new FileManager(_manager);
 
             PageHandler.Content = new CreatePage(this);
         }
@@ -143,10 +159,10 @@ namespace WpfApp1
         {
             // code that saves report/car files
             string directoryPath = Path.Combine(
-                Configuration.PathOfCarsFolder, 
-                Manager.Date.Year.ToString(), 
-                Manager.Date.Month.ToString());
-            string path = Path.Combine(directoryPath, $"{Manager.Date.ToShortDateString()}.car.json");
+                _configuration.PathOfCarsFolder, 
+                _manager.Date.Year.ToString(), 
+                _manager.Date.Month.ToString());
+            string path = Path.Combine(directoryPath, $"{_manager.Date.ToShortDateString()}.car.json");
 
             if (!Directory.Exists(directoryPath))
             {
@@ -163,7 +179,7 @@ namespace WpfApp1
                 }
             }
 
-            var infoObject = new CarWriter().WriteJson(Manager.Cars!, path);
+            var infoObject = new CarWriter().WriteJson(_manager.Cars!, path);
 
             InfoObjectHandling(infoObject);
 
@@ -172,26 +188,34 @@ namespace WpfApp1
         private void CopyFileButton_Click(object sender, RoutedEventArgs e)
         {
             // code of copying report into cache of PC
-            Clipboard.SetText(Manager.Builder.Build().ToString());
+            Clipboard.SetText(_manager.Builder.Build().ToString());
         }
         #endregion
 
         #region MenuItem - Setting - Buttons events
         private void SettingButton_Click(object sender, RoutedEventArgs e)
         {
-            PageHandler.Content = new SettingsPage(Configuration);
+            PageHandler.Content = new SettingsPage(_configuration);
         }
         #endregion
 
         #region MenuItem - Menu - Buttons events
+        private void CarNumberItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (_manager.Cars == null)
+                return;
+
+            PageHandler.Content = new CarNumberPage(_manager.Cars, _configuration);
+        }
+
         private void FilePageItem_Click(object sender, RoutedEventArgs e)
         {
-            PageHandler.Content = new FileManagementPage(Manager);
+            PageHandler.Content = new FileManagementPage(_manager);
         }
 
         private void ReportPageItem_Click(object sender, RoutedEventArgs e)
         {
-            PageHandler.Content = new ReportPage(Manager);
+            PageHandler.Content = new ReportPage(_manager);
         }
 
         private void ResetCarButton_Click(object sender, RoutedEventArgs e)
@@ -204,12 +228,12 @@ namespace WpfApp1
 
                 InfoObjectHandling(result);
 
-                Manager.Cars = result.Cars;
+                _manager.Cars = result.Cars;
 
                 // refresh view if it is ReportPage
                 if (PageHandler.Content is ReportPage content)
                 {
-                    PageHandler.Content = new ReportPage(Manager);
+                    PageHandler.Content = new ReportPage(_manager);
                 }
             }
         }
@@ -217,10 +241,10 @@ namespace WpfApp1
 
         public void SetReportBuilder(IReportBuilder ReportBuilder)
         {
-            Manager = new FileManager(Manager, ReportBuilder);
+            _manager = new FileManager(_manager, ReportBuilder);
             SetAllEnable();
 
-            PageHandler.Content = new ReportPage(Manager);
+            PageHandler.Content = new ReportPage(_manager);
         }
 
         private void SetAllEnable()
@@ -254,6 +278,15 @@ namespace WpfApp1
         private void Window_Closed(object sender, EventArgs e)
         {
             SaveWindowConfiguration();
+
+            if (_configuration.CarsChanged)
+            {
+                CarWriter carWriter = new CarWriter();
+
+                string path = Directory.GetCurrentDirectory() + "\\cars.txt";
+
+                carWriter.WriteCarNumbers(_manager.Cars ?? new List<Car>(), path);
+            }
         }
 
         #endregion

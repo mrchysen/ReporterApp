@@ -1,6 +1,7 @@
-﻿using System.Text.Json;
+﻿using Core.Cars;
+using System.Text.Json;
 
-namespace Core.Cars.FileAccess;
+namespace DAL.FileAccess;
 
 public class CarReader
 {

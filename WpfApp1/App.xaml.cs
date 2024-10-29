@@ -10,15 +10,21 @@ namespace WpfApp1
     /// </summary>
     public partial class App : Application
     {
-        private void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        protected override void OnStartup(StartupEventArgs e)
         {
-            MessageBox.Show(
-                "Nothandled Error: " + e.Exception.Message,
-                "Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledExceptionProcessor);
+            base.OnStartup(e);
+        }
 
-            e.Handled = true;
+        private void UnhandledExceptionProcessor(object sender, UnhandledExceptionEventArgs e)
+        {
+            Exception exception = e.ExceptionObject as Exception ?? new Exception("Пустая ошибка");
+            
+            MessageBox.Show(
+                    "Not handled Error: " + exception.Message,
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
         }
     }
 

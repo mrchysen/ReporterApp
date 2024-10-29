@@ -1,4 +1,6 @@
-﻿namespace Core.Cars.FileAccess;
+﻿using Core.Cars;
+
+namespace DAL.FileAccess;
 
 public class InfoObject
 {

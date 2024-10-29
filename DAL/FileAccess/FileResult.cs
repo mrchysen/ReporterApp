@@ -1,4 +1,4 @@
-﻿namespace Core.Cars.FileAccess;
+﻿namespace DAL.FileAccess;
 
 public enum FileResult
 {
