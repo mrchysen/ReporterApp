@@ -21,7 +21,7 @@ public class AppManager : INotifyPropertyChanged
     { 
         Cars = cars;
     }
-    public AppManager(AppManager Prototype) 
+    public AppManager(AppManager Prototype)  : this(Prototype.Cars)
     {
         Cars = Prototype.Cars;
         CarsChanged = Prototype.CarsChanged;
@@ -76,7 +76,7 @@ public class AppManager : INotifyPropertyChanged
         }
     } 
 
-    public List<Car>? Cars
+    public List<Car> Cars
     {
         get
         {

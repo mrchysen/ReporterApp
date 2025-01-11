@@ -58,15 +58,13 @@ public partial class MainWindow : Window
     #region Start Configuration Methods
     protected void ConfigureWindow()
     {
-        string path = Path.Combine(Directory.GetCurrentDirectory(), "window.config.json");
-
-        if (!File.Exists(path))
+        if (!File.Exists(_filesConfiguration.GetWindowConfigurationFolderPath))
         {
             SetDefaultWindowConfiguration();
             return;
         }
 
-        string json = File.ReadAllText(path);
+        string json = File.ReadAllText(_filesConfiguration.GetWindowConfigurationFolderPath);
         
         Debug.WriteLine("Нашёл файл");
         try
@@ -116,9 +114,7 @@ public partial class MainWindow : Window
 
         string json = JsonSerializer.Serialize(_configuration);
 
-        var path = Path.Combine(Directory.GetCurrentDirectory(), "window.config.json");
-
-        using StreamWriter sw = new StreamWriter(path, false);
+        using var sw = new StreamWriter(_filesConfiguration.GetWindowConfigurationFolderPath, false);
             
         sw.WriteLine(json);
 
@@ -215,7 +211,7 @@ public partial class MainWindow : Window
 
         if (Result == MessageBoxResult.Yes)
         {
-            var result = new CarsFileReader().ReadOnlyNumbers(Directory.GetCurrentDirectory() + "\\cars.txt");
+            var result = new CarsFileReader().ReadOnlyNumbers(_filesConfiguration.GetCarsNumbersFilePath);
 
             InfoObjectHandling(result);
 
@@ -274,7 +270,7 @@ public partial class MainWindow : Window
         {
             var carWriter = new CarsFileWriter();
 
-            var result = carWriter.WriteCarNumbers(_appManager.Cars ?? [], _filesConfiguration.GetCarsNumbersFolderPath);
+            var result = carWriter.WriteCarNumbers(_appManager.Cars ?? [], _filesConfiguration.GetCarsNumbersFilePath);
 
             InfoObjectHandling(result);
         }
