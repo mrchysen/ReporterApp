@@ -2,9 +2,9 @@
 
 namespace DAL.FileAccess;
 
-public class InfoObject
+public class CarsOperationInfo
 {
-    public FileResult Result { get; set; }
+    public FileOperationResult Result { get; set; }
 
     public List<Car>? Cars { get; set; }
 

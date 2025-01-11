@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Core.Reports;
 
-public class StandartReportBuilder : IReportBuilder
+public class DefaultReportBuilder : IReportBuilder
 {
     protected Report Report = new();
 

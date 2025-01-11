@@ -2,7 +2,7 @@
 
 namespace Core.Reports;
 
-public class GasAndStandartReportBuilder : IReportBuilder
+public class GasAndDefaultReportBuilder : IReportBuilder
 {
     protected Report Report = new();
     public string ReportType() => "Топливный + стандартный отчёт";
@@ -11,10 +11,10 @@ public class GasAndStandartReportBuilder : IReportBuilder
 
     public IReportBuilder GetBaseReport(List<Car> cars)
     {
-        IReportBuilder Standartbuilder = new StandartReportBuilder().GetBaseReport(cars);
+        IReportBuilder DefaultBuilder = new DefaultReportBuilder().GetBaseReport(cars);
         IReportBuilder GasReportBuilder = new GasReportBuilder().GetBaseReport(cars);
 
-        Report.BasePart = Standartbuilder.Build().BasePart + "\n" + GasReportBuilder.Build().BasePart;
+        Report.BasePart = DefaultBuilder.Build().BasePart + "\n" + GasReportBuilder.Build().BasePart;
 
         return this;
     }
