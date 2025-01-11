@@ -104,7 +104,7 @@ public class FileManager : INotifyPropertyChanged
 
     // For DataBindings \\
     public event PropertyChangedEventHandler PropertyChanged;
-    private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+    private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }

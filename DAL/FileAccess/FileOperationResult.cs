@@ -1,6 +1,6 @@
 ﻿namespace DAL.FileAccess;
 
-public enum FileResult
+public enum FileOperationResult
 {
     Success,
     Error,

@@ -3,17 +3,17 @@ using System.Text.Json;
 
 namespace DAL.FileAccess;
 
-public class CarReader
+public class CarsFileReader
 {
     protected const string NotFoundFileText = "Info: Файла машин не нашлось(примерный файл <file_name>.car)";
     protected const string SuccessText = "Ok: Всё считалось";
 
-    public InfoObject ReadJson(string path)
+    public CarsOperationInfo ReadJson(string path)
     {
         List<Car> cars = new List<Car>();
 
         if (!File.Exists(path))
-            return GetInfoObject(cars, FileResult.Info, NotFoundFileText);
+            return GetInfoObject(cars, FileOperationResult.Info, NotFoundFileText);
 
         using StreamReader sr = new StreamReader(path);
 
@@ -25,18 +25,18 @@ public class CarReader
         }
         catch (Exception ex)
         {
-            return GetInfoObject(cars, FileResult.Error, "Error: " + ex.Message);
+            return GetInfoObject(cars, FileOperationResult.Error, "Error: " + ex.Message);
         }
 
-        return GetInfoObject(cars, FileResult.Success, SuccessText);
+        return GetInfoObject(cars, FileOperationResult.Success, SuccessText);
     }
 
-    public InfoObject ReadOnlyNumbers(string path)
+    public CarsOperationInfo ReadOnlyNumbers(string path)
     {
         List<Car> cars = new List<Car>();
 
         if (!File.Exists(path))
-            return GetInfoObject(cars, FileResult.Info, NotFoundFileText);
+            return GetInfoObject(cars, FileOperationResult.Info, NotFoundFileText);
 
         try
         {
@@ -56,13 +56,13 @@ public class CarReader
         }
         catch (Exception ex)
         {
-            return GetInfoObject(cars, FileResult.Error, "Error: " + ex.Message);
+            return GetInfoObject(cars, FileOperationResult.Error, "Error: " + ex.Message);
         }
 
-        return GetInfoObject(cars, FileResult.Success, SuccessText);
+        return GetInfoObject(cars, FileOperationResult.Success, SuccessText);
     }
 
-    private InfoObject GetInfoObject(List<Car> cars, FileResult result, string message) => new()
+    private CarsOperationInfo GetInfoObject(List<Car> cars, FileOperationResult result, string message) => new()
     {
         Cars = cars,
         Result = result,

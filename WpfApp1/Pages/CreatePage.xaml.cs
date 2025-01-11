@@ -21,9 +21,9 @@ namespace WpfApp1.Pages
 
         protected void FillWithReportTypes()
         { 
-            StackOfReportsType.Children.Add(CreateButton<StandartReportBuilder>("Стандартный отчёт"));
+            StackOfReportsType.Children.Add(CreateButton<DefaultReportBuilder>("Стандартный отчёт"));
             StackOfReportsType.Children.Add(CreateButton<GasReportBuilder>("Топливный отчёт"));
-            StackOfReportsType.Children.Add(CreateButton<GasAndStandartReportBuilder>("Стандартный + топливный\n\t отчёт"));
+            StackOfReportsType.Children.Add(CreateButton<GasAndDefaultReportBuilder>("Стандартный + топливный\n\t отчёт"));
         }
 
         protected Button CreateButton<T>(string text) where T : IReportBuilder , new()

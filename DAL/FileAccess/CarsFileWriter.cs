@@ -3,9 +3,9 @@ using System.Text.Json;
 
 namespace DAL.FileAccess;
 
-public class CarWriter
+public class CarsFileWriter
 {
-    public InfoObject WriteJson(List<Car> cars, string path)
+    public CarsOperationInfo WriteJson(List<Car> cars, string path)
     {
         try
         {
@@ -20,7 +20,7 @@ public class CarWriter
             return new()
             {
                 Cars = cars,
-                Result = FileResult.Error,
+                Result = FileOperationResult.Error,
                 Message = "Error: " + ex.Message
             };
         }
@@ -28,12 +28,12 @@ public class CarWriter
         return new()
         {
             Cars = cars,
-            Result = FileResult.Success,
+            Result = FileOperationResult.Success,
             Message = "Ok: Файл записан"
         };
     }
 
-    public InfoObject WriteCarNumbers(List<Car> cars, string path)
+    public CarsOperationInfo WriteCarNumbers(List<Car> cars, string path)
     {
         var textWithNumbers = string.Join("\r\n", cars.Select(c => c.Number));
 
@@ -50,7 +50,7 @@ public class CarWriter
             return new()
             {
                 Cars = cars,
-                Result = FileResult.Error,
+                Result = FileOperationResult.Error,
                 Message = "Error: " + ex.Message
             };
         }
@@ -58,7 +58,7 @@ public class CarWriter
         return new()
         {
             Cars = cars,
-            Result = FileResult.Success,
+            Result = FileOperationResult.Success,
             Message = "Ok: Файл записан"
         };
     }
