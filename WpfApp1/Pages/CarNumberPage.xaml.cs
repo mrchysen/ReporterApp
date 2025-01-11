@@ -1,4 +1,5 @@
 ﻿using Core.Cars;
+using Core.Managers;
 using Reporter.Logic.Configuration;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,14 +12,14 @@ namespace Reporter.Pages
     public partial class CarNumberPage : Page
     {
         private List<Car> _cars;
-        private WindowConfiguration _windowConfiguration;
+        private AppManager _appManager;
 
-        public CarNumberPage(List<Car> cars, WindowConfiguration windowConfiguration)
+        public CarNumberPage(List<Car> cars, AppManager appManager)
         {
             InitializeComponent();
 
             _cars = cars;
-            _windowConfiguration = windowConfiguration;
+            _appManager = appManager;
 
             TextBox.Text = string.Join("\r\n", cars);
         }
@@ -30,7 +31,7 @@ namespace Reporter.Pages
             _cars.Clear();
             _cars.AddRange(cars);
 
-            _windowConfiguration.CarsChanged = true;
+            _appManager.CarsChanged = true;
         }
     }
 }

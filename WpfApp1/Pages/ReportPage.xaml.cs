@@ -12,9 +12,9 @@ namespace WpfApp1.Pages
     /// </summary>
     public partial class ReportPage : Page
     {
-        private FileManager _manager;
+        private AppManager _manager;
 
-        public ReportPage(FileManager manager)
+        public ReportPage(AppManager manager)
         {
             InitializeComponent();
 
@@ -34,7 +34,7 @@ namespace WpfApp1.Pages
             TextBox.SetBinding(TextBox.TextProperty, TextBoxBinding);
         }
 
-        protected FileManager Manager 
+        protected AppManager Manager 
         { 
             set { 
                 _manager = value; 

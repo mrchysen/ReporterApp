@@ -5,31 +5,31 @@ using Core.Reports;
 
 namespace Core.Managers;
 
-public class FileManager : INotifyPropertyChanged
+public class AppManager : INotifyPropertyChanged
 {
     // Fields \\
     protected DateTime _Date = DateTime.Now.AddDays(-1);
     protected IReportBuilder? _ReportBuilder;
-    protected List<Car>? _Cars;
+    protected List<Car> _Cars;
     protected bool Saved = false;
     protected CarIteratorClass _CarIteratorClass;
 
-    // Constructors \\
-    public FileManager(IReportBuilder ReportBuilder)
-    {
-        _ReportBuilder = ReportBuilder;
-    }
-    public FileManager() { }
-    public FileManager(FileManager Prototype) 
-    {
-        Cars = Prototype.Cars;
-    }
-    public FileManager(FileManager Prototype, IReportBuilder ReportBuilder)
-    {
-        Cars = Prototype.Cars;
-        _ReportBuilder = ReportBuilder;
-    }
+    public bool CarsChanged { get; set; } = false;
 
+    // Constructors \\
+    public AppManager(List<Car> cars) 
+    { 
+        Cars = cars;
+    }
+    public AppManager(AppManager Prototype) 
+    {
+        Cars = Prototype.Cars;
+        CarsChanged = Prototype.CarsChanged;
+    }
+    public AppManager(AppManager Prototype, IReportBuilder ReportBuilder) : this(Prototype)
+    {
+        _ReportBuilder = ReportBuilder;
+    }
 
     // Properties \\
     public string? TypeOfReport 

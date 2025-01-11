@@ -11,9 +11,9 @@ namespace Reporter.Pages
     /// </summary>
     public partial class FileManagementPage : Page
     {
-        protected FileManager FileManager;
+        protected AppManager FileManager;
 
-        public FileManagementPage(FileManager fileManager)
+        public FileManagementPage(AppManager fileManager)
         {
             InitializeComponent();
 

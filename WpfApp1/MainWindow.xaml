@@ -10,7 +10,6 @@
         MinHeight="450" MinWidth="800"
         Closed="Window_Closed">
     
-    
     <Window.Resources>
         <Style TargetType="Menu">
             <Setter Property="Background" Value="#283044" />
@@ -39,14 +38,13 @@
         </Grid.RowDefinitions>
 
         <Menu Grid.Row="0">
-
             <MenuItem Header="Файл" Style="{StaticResource WhiteForeground}">
                 <MenuItem Click="OpenFileButton_Click" Header="Открыть" Style="{StaticResource BlackForeground}"/>
                 <MenuItem Click="CreateFileButton_Click" Header="Создать" Style="{StaticResource BlackForeground}"/>
                 <MenuItem x:Name="SaveFileButton" Click="SaveFileButton_Click" Header="Сохранить" Style="{StaticResource BlackForeground}"/>
                 <MenuItem x:Name="CopyFileMenuButton" Click="CopyFileButton_Click" Header="Скопировать в буфер обмена" Style="{StaticResource BlackForeground}"/>
             </MenuItem>
-            
+
             <MenuItem Header="Меню" Style="{StaticResource LeftBorder}" x:Name="MenuFileButton">
                 <MenuItem Click="FilePageItem_Click" Header="Файла" Style="{StaticResource BlackForeground}"/>
                 <MenuItem Click="CarNumberItem_Click"  Header="Машин" Style="{StaticResource BlackForeground}"/>
@@ -54,8 +52,6 @@
                 <Separator />
                 <MenuItem  Header="Отчистить машины" Click="ResetCarButton_Click" Style="{StaticResource BlackForeground}"/>
             </MenuItem>
-            
-            <MenuItem Click="SettingButton_Click" Header="Настройки" Style="{StaticResource LeftBorder}"></MenuItem>
         </Menu>
 
         <Frame Grid.Row="1" x:Name="PageHandler" NavigationUIVisibility="Hidden">

@@ -10,6 +10,8 @@ namespace WpfApp1
     /// </summary>
     public partial class App : Application
     {
+        public const string ApplicationName = "ReporterApp";
+
         protected override void OnStartup(StartupEventArgs e)
         {
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledExceptionProcessor);
@@ -27,5 +29,4 @@ namespace WpfApp1
                     MessageBoxImage.Error);
         }
     }
-
 }

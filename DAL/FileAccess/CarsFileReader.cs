@@ -59,6 +59,11 @@ public class CarsFileReader
             return GetInfoObject(cars, FileOperationResult.Error, "Error: " + ex.Message);
         }
 
+        if(cars.Count == 0)
+        {
+            return GetInfoObject(cars, FileOperationResult.Info, $"Info: в файле({path}) нет номеров машин.");
+        }
+
         return GetInfoObject(cars, FileOperationResult.Success, SuccessText);
     }
 

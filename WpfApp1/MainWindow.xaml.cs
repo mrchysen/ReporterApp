@@ -10,15 +10,17 @@ using Core.Managers;
 using Core.Reports;
 using DAL.FileAccess;
 using Core.Cars;
+using Reporter.Configuration;
 
 namespace WpfApp1;
 
 public partial class MainWindow : Window
 {
     // Manager keeps all data
-    private FileManager _manager;
+    private AppManager _appManager;
 
     private WindowConfiguration _configuration = null!;
+    private readonly FilesConfiguration _filesConfiguration = new();
 
     public MainWindow()
     {
@@ -26,15 +28,13 @@ public partial class MainWindow : Window
 
         // Configuration \\
         ConfigureWindow();
+        ConfigureFiles();
 
-        // Default manager. It is empty for default
-        _manager = new();
-
-        var result = new CarsFileReader().ReadOnlyNumbers(Directory.GetCurrentDirectory() + "\\cars.txt");
+        var result = new CarsFileReader().ReadOnlyNumbers(_filesConfiguration.GetCarsNumbersFilePath);
 
         InfoObjectHandling(result);
 
-        _manager.Cars = result.Cars;
+        _appManager = new(result.Cars == null || result.Cars.Count == 0 ? [new Car() { Number = "XXX "}] : result.Cars);
 
         // First page - default page
         PageHandler.Content = new CreatePage(this);
@@ -43,6 +43,14 @@ public partial class MainWindow : Window
         MenuFileButton.IsEnabled = false;
         CopyFileMenuButton.IsEnabled = false;
         SaveFileButton.IsEnabled = false;
+    }
+
+    private void ConfigureFiles()
+    {
+        Directory.CreateDirectory(_filesConfiguration.GetDataFolderPath);
+
+        if(!File.Exists(_filesConfiguration.GetCarsNumbersFilePath)) 
+            File.Create(_filesConfiguration.GetCarsNumbersFilePath);
     }
 
     #region Methods
@@ -71,11 +79,6 @@ public partial class MainWindow : Window
             this.Top = _configuration.Location.Y;
             this.Width = _configuration.Size.Width;
             this.Height = _configuration.Size.Height;
-
-            if (string.IsNullOrEmpty(_configuration.PathOfCarsFolder))
-            {
-                _configuration.PathOfCarsFolder = Path.Combine(Directory.GetCurrentDirectory(), "CarsFolder");
-            }
         }
         catch (Exception ex) 
         {
@@ -121,14 +124,13 @@ public partial class MainWindow : Window
 
         sw.Close();
     }
-
     #endregion
 
     #region MenuItem - File - Buttons events
     private void OpenFileButton_Click(object sender, RoutedEventArgs e)
     {
         OpenFileDialog fileDialog = new();
-        fileDialog.InitialDirectory = _configuration.PathOfCarsFolder;
+        fileDialog.InitialDirectory = _filesConfiguration.GetDataFolderPath;
         fileDialog.Filter = "(*.json)|*.json|All files (*.*)|*.*";
 
         if(fileDialog.ShowDialog() == true) 
@@ -139,7 +141,7 @@ public partial class MainWindow : Window
 
             InfoObjectHandling(result);
 
-            _manager.Cars = result.Cars;
+            _appManager.Cars = result.Cars;
 
             PageHandler.Content = new CreatePage(this);
         }
@@ -147,7 +149,7 @@ public partial class MainWindow : Window
     private void CreateFileButton_Click(object sender, RoutedEventArgs e)
     {
         // code of creating new file with reports
-        _manager = new FileManager(_manager);
+        _appManager = new AppManager(_appManager);
 
         PageHandler.Content = new CreatePage(this);
     }
@@ -155,10 +157,10 @@ public partial class MainWindow : Window
     {
         // code that saves report/car files
         string directoryPath = Path.Combine(
-            _configuration.PathOfCarsFolder, 
-            _manager.Date.Year.ToString(), 
-            _manager.Date.Month.ToString());
-        string path = Path.Combine(directoryPath, $"{_manager.Date.ToShortDateString()}.car.json");
+            _filesConfiguration.GetDataFolderPath, 
+            _appManager.Date.Year.ToString(), 
+            _appManager.Date.Month.ToString());
+        string path = Path.Combine(directoryPath, $"{_appManager.Date.ToShortDateString()}.car.json");
 
         if (!Directory.Exists(directoryPath))
         {
@@ -175,7 +177,7 @@ public partial class MainWindow : Window
             }
         }
 
-        var infoObject = new CarsFileWriter().WriteJson(_manager.Cars!, path);
+        var infoObject = new CarsFileWriter().WriteJson(_appManager.Cars!, path);
 
         InfoObjectHandling(infoObject);
 
@@ -184,34 +186,27 @@ public partial class MainWindow : Window
     private void CopyFileButton_Click(object sender, RoutedEventArgs e)
     {
         // code of copying report into cache of PC
-        Clipboard.SetText(_manager.Builder.Build().ToString());
-    }
-    #endregion
-
-    #region MenuItem - Setting - Buttons events
-    private void SettingButton_Click(object sender, RoutedEventArgs e)
-    {
-        PageHandler.Content = new SettingsPage(_configuration);
+        Clipboard.SetText(_appManager.Builder.Build().ToString());
     }
     #endregion
 
     #region MenuItem - Menu - Buttons events
     private void CarNumberItem_Click(object sender, RoutedEventArgs e)
     {
-        if (_manager.Cars == null)
+        if (_appManager.Cars == null)
             return;
 
-        PageHandler.Content = new CarNumberPage(_manager.Cars, _configuration);
+        PageHandler.Content = new CarNumberPage(_appManager.Cars, _appManager);
     }
 
     private void FilePageItem_Click(object sender, RoutedEventArgs e)
     {
-        PageHandler.Content = new FileManagementPage(_manager);
+        PageHandler.Content = new FileManagementPage(_appManager);
     }
 
     private void ReportPageItem_Click(object sender, RoutedEventArgs e)
     {
-        PageHandler.Content = new ReportPage(_manager);
+        PageHandler.Content = new ReportPage(_appManager);
     }
 
     private void ResetCarButton_Click(object sender, RoutedEventArgs e)
@@ -224,12 +219,12 @@ public partial class MainWindow : Window
 
             InfoObjectHandling(result);
 
-            _manager.Cars = result.Cars;
+            _appManager.Cars = result.Cars;
 
             // refresh view if it is ReportPage
             if (PageHandler.Content is ReportPage content)
             {
-                PageHandler.Content = new ReportPage(_manager);
+                PageHandler.Content = new ReportPage(_appManager);
             }
         }
     }
@@ -237,10 +232,10 @@ public partial class MainWindow : Window
 
     public void SetReportBuilder(IReportBuilder ReportBuilder)
     {
-        _manager = new FileManager(_manager, ReportBuilder);
+        _appManager = new AppManager(_appManager, ReportBuilder);
         SetAllEnable();
 
-        PageHandler.Content = new ReportPage(_manager);
+        PageHandler.Content = new ReportPage(_appManager);
     }
 
     private void SetAllEnable()
@@ -275,13 +270,13 @@ public partial class MainWindow : Window
     {
         SaveWindowConfiguration();
 
-        if (_configuration.CarsChanged)
+        if (_appManager.CarsChanged)
         {
-            CarsFileWriter carWriter = new CarsFileWriter();
+            var carWriter = new CarsFileWriter();
 
-            string path = Directory.GetCurrentDirectory() + "\\cars.txt";
+            var result = carWriter.WriteCarNumbers(_appManager.Cars ?? [], _filesConfiguration.GetCarsNumbersFolderPath);
 
-            carWriter.WriteCarNumbers(_manager.Cars ?? new List<Car>(), path);
+            InfoObjectHandling(result);
         }
     }
 
