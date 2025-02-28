@@ -5,6 +5,25 @@ namespace DAL.FileAccess;
 
 public class CarsFileWriter
 {
+    public CarsOperationInfo WriteImages(List<Car> carsWithImages, string fileFolder)
+    {
+        foreach(var car in carsWithImages)
+        {
+            using (var sr = new FileStream(Path.Combine(fileFolder, car.ImgPath), FileMode.Create))
+            {
+                car.PictureMemoryStream.CopyTo(sr);
+
+                sr.Close();
+            }
+        }
+
+        return new CarsOperationInfo()
+        {
+            Message = "Все изображения сохранены",
+            Result = FileOperationResult.Success
+        };
+    }
+
     public CarsOperationInfo WriteJson(List<Car> cars, string path)
     {
         try

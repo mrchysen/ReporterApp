@@ -155,27 +155,11 @@ public partial class MainWindow : Window
         string directoryPath = Path.Combine(
             _filesConfiguration.GetDataFolderPath, 
             _appManager.Date.Year.ToString(), 
-            _appManager.Date.Month.ToString());
-        string path = Path.Combine(directoryPath, $"{_appManager.Date.ToShortDateString()}.car.json");
+            _appManager.Date.Month.ToString(), 
+            DateTime.Now.ToString("dd.MM.yyyy"));
+        string fileName = $"{_appManager.Date.ToString("dd.MM.yyyy")}.car.json";
 
-        if (!Directory.Exists(directoryPath))
-        {
-            Directory.CreateDirectory(directoryPath);
-        }
-
-        if (File.Exists(path))
-        {
-            var result = MessageBox.Show("Такой файл уже существует. Перезаписать его?", "Информация", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-        
-            if(result == MessageBoxResult.No) 
-            {
-                return;
-            }
-        }
-
-        var infoObject = new CarsFileWriter().WriteJson(_appManager.Cars!, path);
-
-        InfoObjectHandling(infoObject);
+        new CarsWriter().Write(_appManager.Cars, directoryPath, fileName);
 
         MessageBox.Show("Файл сохранён.", "Информация", MessageBoxButton.OK, MessageBoxImage.Warning);
     }

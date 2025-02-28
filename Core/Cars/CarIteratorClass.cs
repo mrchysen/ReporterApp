@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace Core.Cars;
 
+// ToDo подумать можно ли реализовать IEnumerable
 public class CarIteratorClass : INotifyPropertyChanged
 {
     // Fields \\

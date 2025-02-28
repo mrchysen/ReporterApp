@@ -15,7 +15,7 @@
         <Border>
             <Image
                 x:Name="Image"
-                Source="../Imgs/plus.png">
+                Source="/Imgs/plus.png">
                 
             </Image>
         </Border>
@@ -27,8 +27,9 @@
 
             <StackPanel
                 Orientation="Horizontal">
-                
+
                 <Button
+                    IsCancel="True"
                     Margin="20 0 0 0"
                     Width="100"
                     Height="45"
@@ -37,6 +38,7 @@
                 </Button>
                 
                 <Button
+                    x:Name="SaveButton"
                     Margin="20 0 0 0"
                     Width="100"
                     Height="45"
@@ -44,7 +46,14 @@
                     Сохранить
                 </Button>
 
+                <Image
+                    x:Name="OkImage"
+                    Margin="20 0 0 0"
+                    Source="/Imgs/ok.png"
+                    Visibility="Hidden"/>
+
                 <TextBlock 
+                    x:Name="InfoTextBlock"
                     VerticalAlignment="Center"
                     Margin="20 0 0 0"
                     FontSize="16">
