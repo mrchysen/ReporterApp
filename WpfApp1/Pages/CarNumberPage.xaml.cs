@@ -28,8 +28,6 @@ namespace Reporter.Pages
         {
             var cars = TextBox.Text.Split("\r\n", StringSplitOptions.RemoveEmptyEntries).Select(s => new Car() { Number = s }).ToList();
 
-            var newCars = 
-
             _cars.Clear();
             _cars.AddRange(cars);
 
