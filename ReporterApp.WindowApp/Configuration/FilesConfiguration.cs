@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using WpfApp1;
+using ReporterApp.WindowApp;
 
 namespace Reporter.Configuration;
 

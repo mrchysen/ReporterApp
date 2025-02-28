@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace WpfApp1.Logic.ValueConverters
+namespace ReporterApp.WindowApp.Logic.ValueConverters
 {
     public class PredicatConverter : IValueConverter
     {

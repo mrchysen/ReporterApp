@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace WpfApp1.Pages
+namespace ReporterApp.WindowApp.Pages
 {
     /// <summary>
     /// Логика взаимодействия для CreatePage.xaml

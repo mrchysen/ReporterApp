@@ -4,7 +4,7 @@ using System.Windows.Data;
 using System.Windows.Media;
 using Color = System.Windows.Media.Color;
 
-namespace WpfApp1.Logic.ValueConverters;
+namespace ReporterApp.WindowApp.Logic.ValueConverters;
 
 public class ButtonColorConverter : IValueConverter
 {

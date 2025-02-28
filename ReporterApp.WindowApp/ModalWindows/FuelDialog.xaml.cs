@@ -1,7 +1,7 @@
 ﻿using Core.Cars;
 using System.Windows;
 
-namespace WpfApp1.ModalWindows
+namespace ReporterApp.WindowApp.ModalWindows
 {
     /// <summary>
     /// Логика взаимодействия для FuelDialog.xaml

@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using WpfApp1.Pages;
+using ReporterApp.WindowApp.Pages;
 using System.IO;
 using System.Text.Json;
 using Reporter.Logic.Configuration;
@@ -12,7 +12,7 @@ using DAL.FileAccess;
 using Core.Cars;
 using Reporter.Configuration;
 
-namespace WpfApp1;
+namespace ReporterApp.WindowApp;
 
 public partial class MainWindow : Window
 {

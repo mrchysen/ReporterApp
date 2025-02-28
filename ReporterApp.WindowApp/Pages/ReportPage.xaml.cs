@@ -3,9 +3,9 @@ using Reporter.Logic.ValueConverters;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using WpfApp1.Elements;
+using ReporterApp.WindowApp.Elements;
 
-namespace WpfApp1.Pages
+namespace ReporterApp.WindowApp.Pages
 {
     /// <summary>
     /// Логика взаимодействия для ReportPage.xaml
