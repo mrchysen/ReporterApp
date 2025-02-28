@@ -14,7 +14,7 @@ namespace WpfApp1.Elements
     public partial class CarIteratorComponent : UserControl
     {
         // Fields \\
-        protected CarIteratorClass _Iterator;
+        protected CarIteratorClass _Iterator = new([new Car() { Number = "XXX"}]);
 
         // Constructors \\
         public CarIteratorComponent()
@@ -162,15 +162,14 @@ namespace WpfApp1.Elements
 
         private void ScreenButton_Click(object sender, RoutedEventArgs e)
         {
-            if (_Iterator == null)
-                return;
-
             Car car = _Iterator.GetCar;
 
             if(car.WasScreen)
                 car.WasScreen = false;
             else
                 car.WasScreen = true;
+
+            // add image dialog here
 
             _Iterator.NotifyOutSide();
         }
