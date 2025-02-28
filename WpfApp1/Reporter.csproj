@@ -6,12 +6,16 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>Img\iconOfApp.ico</ApplicationIcon>
+    <ApplicationIcon>Imgs\iconOfApp.ico</ApplicationIcon>
     <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="Img\iconOfApp.ico" />
+    <None Remove="Imgs\ok.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Imgs\iconOfApp.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,6 +31,12 @@
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj" />
     <ProjectReference Include="..\DAL\DAL.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Imgs\ok.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>

@@ -25,16 +25,37 @@
                 Margin="3"
                 AcceptsReturn="True"/>
 
-            <Button 
-                Grid.Row="2" 
-                x:Name="SaveButton"
-                Click="SaveButton_Click"
-                Width="256" 
-                Height="64" 
-                HorizontalAlignment="Right" 
-                Margin="0 0 3 0">
-                Сохранить
-            </Button>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel 
+                    x:Name="SuccessStatus" 
+                    Orientation="Horizontal"
+                    Visibility="Hidden">
+                    <Image 
+                        Margin="4 0 0 0"
+                        Source="/Imgs/ok.png"/>
+                    <TextBlock
+                        Margin="10 0 0 0"
+                        VerticalAlignment="Center">Сохранено</TextBlock>
+                </StackPanel>
+
+                <Button 
+                    Grid.Column="1" 
+                    x:Name="SaveButton"
+                    Click="SaveButton_Click"
+                    Width="256" 
+                    Height="64"
+                    HorizontalAlignment="Right"
+                    Margin="0 0 4 0">
+                    Сохранить
+                </Button>
+            </Grid>
+            
+            
         </Grid>
     </GroupBox>
 </Page>
