@@ -5,13 +5,12 @@ using Reporter.Logic.Configuration;
 using System.Diagnostics;
 using Microsoft.Win32;
 using DAL.FileAccess;
-using Reporter.Configuration;
 using ReporterApp.Core.Managers;
 using ReporterApp.Core.Reports;
 using ReporterApp.WindowApp.Pages.NewDesign.StartPage;
 using ReporterApp.WindowApp.Utils;
 
-namespace WpfApp;
+namespace ReporterApp.WindowApp.Windows.Main;
 
 public partial class MainWindow : Window
 {
@@ -20,114 +19,31 @@ public partial class MainWindow : Window
     // Manager keeps all data
     private AppManager _appManager;
 
-    private WindowConfiguration _configuration = null!;
-    private readonly FilesConfiguration _filesConfiguration = new();
-
     public MainWindow()
     {
         InitializeComponent();
 
         _navigationService = new(Frame);
-        _navigationService.NavigateWithDataContext(new StartPage(new(_navigationService)));
+        _navigationService.NavigateTo(new StartPage(new(_navigationService)));
 
-        // Configuration \\
-        ConfigureWindow();
-        ConfigureFiles();
+        //var result = new CarsFileReader().ReadOnlyNumbers(_filesConfiguration.GetCarsNumbersFilePath);
 
-        var result = new CarsFileReader().ReadOnlyNumbers(_filesConfiguration.GetCarsNumbersFilePath);
-
-        InfoObjectHandling(result);
+        //InfoObjectHandling(result);
 
         //_appManager = new(result.Cars == null? [new Car() { Number = "XXX "}] : result.Cars);
-
-        // Cancel any menu events
-        MenuFileButton.IsEnabled = false;
-        CopyFileMenuButton.IsEnabled = false;
-        SaveFileButton.IsEnabled = false;
-    }
-
-    private void ConfigureFiles()
-    {
-        Directory.CreateDirectory(_filesConfiguration.GetDataFolderPath);
-
-        if(!File.Exists(_filesConfiguration.GetCarsNumbersFilePath)) 
-            File.Create(_filesConfiguration.GetCarsNumbersFilePath);
     }
 
     #region Methods
 
     #region Start Configuration Methods
-    protected void ConfigureWindow()
-    {
-        if (!File.Exists(_filesConfiguration.GetWindowConfigurationFolderPath))
-        {
-            SetDefaultWindowConfiguration();
-            return;
-        }
-
-        string json = File.ReadAllText(_filesConfiguration.GetWindowConfigurationFolderPath);
-        
-        Debug.WriteLine("Нашёл файл");
-        try
-        {
-            _configuration = JsonSerializer.Deserialize<WindowConfiguration>(json) 
-                ?? SetDefaultWindowConfiguration();
-
-            this.WindowState = _configuration.State;
-            this.Left = _configuration.Location.X;
-            this.Top = _configuration.Location.Y;
-            this.Width = _configuration.Size.Width;
-            this.Height = _configuration.Size.Height;
-        }
-        catch (Exception ex) 
-        {
-            ErrorHandling("Ошибка: " + ex.Message);
-
-            SetDefaultWindowConfiguration();
-        }
-    }
-
-    protected WindowConfiguration SetDefaultWindowConfiguration()
-    {
-        this.WindowState = WindowState.Normal;
-        this.Left = 100;
-        this.Top = 100;
-        this.Width = this.MinWidth;
-        this.Height = this.MinHeight;
-
-        _configuration = new((int)MinWidth, (int)MinHeight);
-
-        return _configuration;
-    }
-
-    protected WindowConfiguration GetCurrentConfiguration()
-    {
-        _configuration.State = WindowState;
-        _configuration.Location = new(this.Left, this.Top);
-        _configuration.Size = new(this.Width, this.Height);
-
-        return _configuration;
-    }
-
-    protected void SaveWindowConfiguration()
-    {
-        _configuration = GetCurrentConfiguration();
-
-        string json = JsonSerializer.Serialize(_configuration);
-
-        using var sw = new StreamWriter(_filesConfiguration.GetWindowConfigurationFolderPath, false);
-            
-        sw.WriteLine(json);
-
-        sw.Close();
-    }
+    
     #endregion
 
     #region MenuItem - File - Buttons events
     private void OpenFileButton_Click(object sender, RoutedEventArgs e)
     {
         OpenFileDialog fileDialog = new();
-        fileDialog.InitialDirectory = _filesConfiguration.GetDataFolderPath;
+        //fileDialog.InitialDirectory = _filesConfiguration.GetDataFolderPath;
         fileDialog.Filter = "(*.json)|*.json|All files (*.*)|*.*";
 
         if(fileDialog.ShowDialog() == true) 
@@ -154,7 +70,7 @@ public partial class MainWindow : Window
     {
         // code that saves report/car files
         string directoryPath = Path.Combine(
-            _filesConfiguration.GetDataFolderPath, 
+            //_filesConfiguration.GetDataFolderPath, 
             _appManager.ReportParams.Date.Year.ToString(), 
             _appManager.ReportParams.Date.Month.ToString());
         string path = Path.Combine(directoryPath, $"{_appManager.ReportParams.Date.ToShortDateString()}.car.json");
@@ -212,11 +128,11 @@ public partial class MainWindow : Window
 
         if (Result == MessageBoxResult.Yes)
         {
-            var result = new CarsFileReader().ReadOnlyNumbers(_filesConfiguration.GetCarsNumbersFilePath);
+            //var result = new CarsFileReader().ReadOnlyNumbers(_filesConfiguration.GetCarsNumbersFilePath);
 
-            InfoObjectHandling(result);
+            //InfoObjectHandling(result);
 
-            _appManager.Cars = result.Cars;
+            //_appManager.Cars = result.Cars;
 
             // refresh view if it is ReportPage
             //if (//PageHandler.Content is ReportPage content)
@@ -265,8 +181,7 @@ public partial class MainWindow : Window
 
     private void Window_Closed(object sender, EventArgs e)
     {
-        SaveWindowConfiguration();
-
+        
         //if (_appManager.CarsChanged)
         //{
         //    var carWriter = new CarsFileWriter();

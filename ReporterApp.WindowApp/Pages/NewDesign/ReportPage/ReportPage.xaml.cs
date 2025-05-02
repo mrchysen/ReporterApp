@@ -1,4 +1,6 @@
-﻿using ReporterApp.Core.Cars;
+﻿using DAL.FileAccess;
+using Reporter.Configuration;
+using ReporterApp.Core.Cars;
 using ReporterApp.Core.Reports;
 using System.Windows.Controls;
 
@@ -7,7 +9,6 @@ namespace ReporterApp.WindowApp.Pages.NewDesign.ReportPage;
 public partial class ReportPage : Page
 {
     private readonly BaseReportBuilder _builder;
-    private List<Car> _cars = new(); 
 
     public ReportPage(BaseReportBuilder builder)
     {
@@ -15,18 +16,11 @@ public partial class ReportPage : Page
 
         _builder = builder;
 
-        DataContext = new ReportPageViewModel(_builder, [
-            new(){
-                Number = "111",
-                IsWorked=true
-            },
-            new(){
-                Number = "2"
-            },
-            new(){
-                Number = "3111"
-            }
-            ]);
+        var cars = new CarsFileReader()
+            .ReadOnlyNumbers(FilesConfiguration.GetCarsNumbersFilePath)
+            .Cars ?? [];
+
+        DataContext = new ReportPageViewModel(_builder, cars);
 
         CarIteratorComponent.DataContext = DataContext;
     }

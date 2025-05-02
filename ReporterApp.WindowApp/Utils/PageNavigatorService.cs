@@ -1,5 +1,4 @@
-﻿using ReporterApp.WindowApp.Pages.NewDesign.StartPage;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 namespace ReporterApp.WindowApp.Utils;
 
@@ -12,7 +11,7 @@ public class PageNavigatorService
         _frame = frame;
     }
 
-    public void NavigateWithDataContext(Page page)
+    public void NavigateTo(Page page)
     {
         _frame.Content = page;
     }

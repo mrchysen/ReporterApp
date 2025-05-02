@@ -1,6 +1,4 @@
-﻿using ReporterApp.Core.Cars;
-using ReporterApp.Core.Reports.Utils;
-using System.Text;
+﻿using System.Text;
 
 namespace ReporterApp.Core.Reports;
 

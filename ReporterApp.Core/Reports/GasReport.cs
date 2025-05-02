@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using ReporterApp.Core.Cars;
+using System.Text;
 
 namespace ReporterApp.Core.Reports;
 
@@ -17,10 +18,7 @@ public class GasReportBuilder : BaseReportBuilder
         if(addTitle)
             AddTitle();
 
-        var fueledCars = cars.Where(c =>
-            c.FuelEnd > 0 && c.FuelBegin >= 0 ||
-            c.FuelBegin > 0 && c.FuelEnd == 0)
-                .ToList();
+        var fueledCars = cars.Where(c => CarUtils.IsCarWasFueled(c)).ToList();
 
         if (fueledCars.Count == 0)
         {

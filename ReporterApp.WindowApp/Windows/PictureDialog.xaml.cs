@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Reporter.ModalWindows;
+namespace ReporterApp.WindowApp.Windows;
 
 public partial class PictureDialog : Window
 {

@@ -3,23 +3,23 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <SolidColorBrush
         x:Key="PrimaryColorBrush"
-        Color="#FFCC33" />
+        Color="#1E90FF" />
     <SolidColorBrush
         x:Key="FontColorBrush"
-        Color="#000000" />
+        Color="#333333" />
     <SolidColorBrush
         x:Key="SecondaryColorBrush"
-        Color="#336699" />
+        Color="#87CEFA" />
     <SolidColorBrush
         x:Key="DefaultButtonBrush"
-        Color="#FFDB7F" />
+        Color="#F0F8FF" />
     <SolidColorBrush
         x:Key="ButtonOnMouse"
-        Color="#FFB732" />
+        Color="#ADD8E6" />
     <SolidColorBrush
         x:Key="Success"
-        Color="#008000" />
+        Color="#2E8B57" />
     <SolidColorBrush
         x:Key="Alert"
-        Color="#FF0000" />
+        Color="#DC143C" />
 </ResourceDictionary>

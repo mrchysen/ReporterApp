@@ -159,21 +159,6 @@ public partial class CarIteratorComponent : StackPanel
     //    //_Iterator.NotifyOutSide();
     //}
 
-    //private void ET24kmButton_Click(object sender, RoutedEventArgs e)
-    //{
-    //    if (_Iterator == null)
-    //        return;
-
-    //    Car car = _Iterator.Current;
-
-    //    if (car.Was24kmET)
-    //        car.Was24kmET = false;
-    //    else
-    //        car.Was24kmET = true;
-
-    //    //_Iterator.NotifyOutSide();
-    //}
-
     //private void ParkingButton_Click(object sender, RoutedEventArgs e)
     //{
     //    if (_Iterator == null)
