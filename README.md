@@ -8,4 +8,4 @@ Pictures of result:
 
 ![image 1](./Imgs/im_1.png)
 
-![image 2](./Imgs/im_1.png)
+![image 2](./Imgs/im_2.png)
