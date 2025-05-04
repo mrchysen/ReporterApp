@@ -1,0 +1,52 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>AppImgs\iconOfApp.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="ImgToShow\**" />
+    <EmbeddedResource Remove="ImgToShow\**" />
+    <None Remove="ImgToShow\**" />
+    <Page Remove="ImgToShow\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="AppImgs\ok.png" />
+    <None Remove="AppImgs\StartPageReportIcon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="AppImgs\iconOfApp.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    
+    <None Update="window.config.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ReporterApp.Core\ReporterApp.Core.csproj" />
+    <ProjectReference Include="..\ReporterApp.DAL\ReporterApp.DAL.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="AppImgs\ok.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="AppImgs\StartPageReportIcon.png" />
+    <Resource Update="AppImgs\StartPageReportIcon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+</Project>

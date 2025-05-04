@@ -1,0 +1,40 @@
+﻿<Button x:Class="ReporterApp.WindowApp.Pages.NewDesign.StartPage.Components.StartPageButton"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:ReporterApp.WindowApp.Pages.NewDesign.StartPage.Components"
+        mc:Ignorable="d" 
+        d:DesignHeight="60" 
+        d:DesignWidth="180"
+        BorderBrush="{StaticResource FontColorBrush}"
+        Background="{StaticResource DefaultButtonBrush}"
+        Foreground="{StaticResource FontColorBrush}">
+    <Button.Template>
+        <ControlTemplate
+            TargetType="Button">
+            <Border
+                x:Name="Border"
+                Padding="{TemplateBinding Padding}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                Background="{TemplateBinding Background}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                CornerRadius="10">
+                <ContentPresenter
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Content="{TemplateBinding Content}" />
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger
+                    Property="IsMouseOver"
+                    Value="true">
+                    <Setter
+                        TargetName="Border"
+                        Property="Background"
+                        Value="{StaticResource ButtonOnMouse}" />
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+    </Button.Template>
+</Button>

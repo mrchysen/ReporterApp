@@ -1,0 +1,254 @@
+﻿<StackPanel
+    x:Class="ReporterApp.WindowApp.Pages.NewDesign.ReportPage.Components.CarIteratorComponent"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:converters="clr-namespace:ReporterApp.WindowApp.Pages.NewDesign.ReportPage.ValueConverters"
+    xmlns:local="clr-namespace:ReporterApp.WindowApp.Pages.NewDesign.ReportPage.Components"
+    mc:Ignorable="d"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    d:Background="{StaticResource PrimaryColorBrush}">
+
+    <StackPanel.Resources>
+        <converters:IsCarPropertyTrueConverter
+            x:Key="IsCarPropertyTrueConverter" />
+
+        <Style x:Key="ButtonBorder" TargetType="Border">
+            <Setter 
+                Property="Margin" 
+                Value="5 5 5 0"/>
+            <Setter 
+                Property="BorderBrush" 
+                Value="{StaticResource FontColorBrush}"/>
+            <Setter
+                Property="BorderThickness"
+                Value="1" />
+        </Style>
+        <Style
+            TargetType="Border"
+            x:Key="SeparatorBorder">
+            <Setter 
+                Property="BorderThickness" 
+                Value="0 0 1 0" />
+        </Style>
+        <Style
+            TargetType="Label"
+            x:Key="NormalLabel">
+            <Setter
+                Property="VerticalContentAlignment"
+                Value="Center" />
+            <Setter
+                Property="HorizontalContentAlignment"
+                Value="Left" />
+            <Setter
+                Property="Foreground"
+                Value="{Binding FontColorBrush}" />
+            <Setter
+                Property="FontSize"
+                Value="16" />
+        </Style>
+    </StackPanel.Resources>
+    
+        <!-- Счётчик машины -->
+        <Border
+            BorderBrush="{StaticResource FontColorBrush}"
+            BorderThickness="1"
+            CornerRadius="10"
+            Margin="2"
+            Background="{StaticResource DefaultButtonBrush}">
+            <Label 
+                x:Name="NumericLabel" 
+                FontSize="32"
+                HorizontalAlignment="Center"
+                Foreground="{StaticResource FontColorBrush}"
+                Content="{Binding CurrentCarNumber}" />
+        </Border>
+        <!-- Отображение двух кнопок -->
+        <Border
+            Margin="2 0 2 0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                
+            <Button
+                x:Name="LeftButton"
+                Command="{Binding PrevCarCommand}"
+                Background="{StaticResource DefaultButtonBrush}"
+                BorderBrush="{StaticResource FontColorBrush}"
+                Foreground="{StaticResource FontColorBrush}"
+                Height="32"
+                Content="--" /> 
+            
+            <Button
+                x:Name="RightButton"
+                Command="{Binding NextCarCommand}"
+                Background="{StaticResource DefaultButtonBrush}"
+                Foreground="{StaticResource FontColorBrush}"
+                Grid.Column="1"
+                Height="32"
+                Content="-->" />
+
+
+
+        </Grid>
+        </Border>
+        <!-- Работал -->
+        <Border Style="{StaticResource ButtonBorder}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Style="{StaticResource SeparatorBorder}">
+                    <Label Style="{StaticResource NormalLabel}">Работал</Label>
+                </Border>
+                <Button
+                    x:Name="WorkedButton"
+                Background="{Binding IsCurrentCarWorked, Converter={StaticResource IsCarPropertyTrueConverter}}"
+                    Foreground="{StaticResource FontColorBrush}"
+                    Command="{Binding WorkStatusChangeCommand}"
+                    Grid.Column="1"
+                    Height="35"
+                    Content="Нет" />
+
+            </Grid>
+        </Border>
+        <!-- Заправка -->
+    <Border
+        Style="{StaticResource ButtonBorder}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Border 
+                    Grid.Column="0" 
+                    Style="{StaticResource SeparatorBorder}">
+                    <Label 
+                        Style="{StaticResource NormalLabel}">
+                        Заправка
+                    </Label>
+                </Border>
+            <Button
+                Grid.Column="1"
+                Content="Ввести"
+                Background="{Binding IsFueled, Converter={StaticResource IsCarPropertyTrueConverter}}"
+                Foreground="{StaticResource FontColorBrush}"
+                Command="{Binding ChangeFuelCommand}" />
+        </Grid>
+        </Border>
+        <!-- Фото -->
+        <Border
+        Style="{StaticResource ButtonBorder}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Border
+                    Style="{StaticResource SeparatorBorder}">
+                    <Label 
+                        Style="{StaticResource NormalLabel}">
+                        Фото
+                    </Label>
+                </Border>
+            <Button
+                x:Name="ScreenButton"
+                Grid.Column="1"
+                Background="{Binding IsPhotoAdded, Converter={StaticResource IsCarPropertyTrueConverter}}"
+                Foreground="{StaticResource FontColorBrush}"
+                Command="{Binding PhotoAddedCommand}"
+                Content="Нет" />
+           
+        </Grid>
+        </Border>
+        <!-- 24 км ЕТ -->
+        <Border
+        Style="{StaticResource ButtonBorder}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Border
+                    Style="{StaticResource SeparatorBorder}">
+                    <Label 
+                        Style="{StaticResource NormalLabel}">
+                        24 км Енисейского тракта
+                    </Label>
+                </Border>
+                
+            <Button
+                x:Name="ET24kmButton"
+                Grid.Column="1"
+                Background="{Binding Was24ETArrive, Converter={StaticResource IsCarPropertyTrueConverter}}"
+                Foreground="{StaticResource FontColorBrush}"
+                Command="{Binding Change24ETStatusCommand}"
+                Content="Нет" />
+
+        </Grid>
+        </Border>
+        <!-- Стоянки -->
+        <Border
+            Style="{StaticResource ButtonBorder}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Border 
+                    Style="{StaticResource SeparatorBorder}">
+                    <Label 
+                        Style="{StaticResource NormalLabel}">
+                        Стоянки
+                    </Label>
+                </Border>
+
+                <Button
+                    x:Name="ParkingButton"
+                    Grid.Column="1"
+                    Background="{Binding WasParking, Converter={StaticResource IsCarPropertyTrueConverter}}"
+                    Foreground="{StaticResource FontColorBrush}"
+                    Command="{Binding ChangeParkingCommand}"
+                    Content="Ввести" /> 
+
+            </Grid>
+        </Border>
+
+        <!-- Доп инфо -->
+    <Border
+        Style="{StaticResource ButtonBorder}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Border
+                Style="{StaticResource SeparatorBorder}">
+                <Label
+                    Style="{StaticResource NormalLabel}">
+                    Дополнительная информация
+                </Label>
+            </Border>
+            <Button
+                Grid.Column="1"
+                Height="35"
+                Background="{Binding AddedInfoStatus, Converter={StaticResource IsCarPropertyTrueConverter}}"
+                Foreground="{StaticResource FontColorBrush}"
+                Command="{Binding ChangeAddedInfoCommand}"
+                Content="Ввести" />
+
+        </Grid>
+    </Border>
+</StackPanel>
