@@ -5,8 +5,7 @@ namespace ReporterApp.WindowApp.Pages.NewDesign.StartPage;
 
 public partial class StartPage : Page
 {
-    public StartPage(
-        ViewModelMediator Mediator)
+    public StartPage(ViewModelMediator Mediator)
     {
         InitializeComponent();
 

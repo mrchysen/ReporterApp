@@ -27,9 +27,18 @@ public class DefaultReportBuilder : IReportBuilder
             _isTitleAdded = true;
         }
 
-        foreach(Car car in cars.Where(c => c.IsWorked)) 
+        foreach(Car car in cars) 
         {
             var carSb = new StringBuilder();
+
+            if (!car.IsWorked)
+            {
+                carSb.Append("не работал.");
+
+                _bodySb.AppendLine($"{car.Number} {carSb.ToString()}");
+
+                continue;
+            }
 
             if (car.WasScreen)
             {

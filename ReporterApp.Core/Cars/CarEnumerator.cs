@@ -12,9 +12,7 @@ public class CarEnumerator : ViewModelBase, IEnumerator<Car>
     {
         _cars = cars ?? throw new NullReferenceException(nameof(cars));
     }
-
-
-
+    
     public Car Current => _cars[_currentIndex];
     object IEnumerator.Current => Current;
 

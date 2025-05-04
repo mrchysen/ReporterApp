@@ -37,18 +37,15 @@
                 Style="{StaticResource FirstMenuItem}"
                 Header="Файл">
                 <MenuItem 
-                    Click="OpenFileButton_Click"
                     Command="{Binding OpenReportCommand}"
                     Header="Открыть" />
+                <MenuItem
+                    Command="{Binding OpenStartPageCommand}"
+                    Header="Начальное окно" />
                 <MenuItem 
-                    Click="CreateFileButton_Click" 
-                    Header="Создать" />
-                <MenuItem 
-                    x:Name="SaveFileButton"
                     Command="{Binding SaveReportCommand}"
                     Header="Сохранить" />
                 <MenuItem 
-                    x:Name="CopyFileMenuButton"
                     Command="{Binding CopyToClipboardCommand}" 
                     Header="Скопировать в буфер обмена"/>
             </MenuItem>
@@ -58,7 +55,7 @@
                     Command="{Binding OpenReportSettingsPageCommand}"
                     Header="Параметры отчёта" />
                 <MenuItem
-                    
+                    Command="{Binding OpenCarNumberPageCommand}"
                     Header="Машин"/>
                 <MenuItem
                     Command="{Binding OpenReportPageCommand}"

@@ -2,7 +2,6 @@
 using ReporterApp.WindowApp.Utils;
 using ReporterApp.WindowApp.Windows.Main.Comands;
 using ReporterApp.WindowApp.Windows.Main.Commands;
-using System.Windows.Input;
 
 namespace ReporterApp.WindowApp.Windows.Main;
 
@@ -16,6 +15,8 @@ public class MainWindowViewModel : ViewModelBase
     private BaseMainWindowCommand _openReportCommand;
     private BaseMainWindowCommand _copyToClipboardCommand;
     private BaseMainWindowCommand _resetCarsCommand;
+    private BaseMainWindowCommand _openStartPageCommand;
+    private BaseMainWindowCommand _openCarNumberPageCommand;
 
     public MainWindowViewModel(
         ViewModelMediator mediator,
@@ -33,6 +34,8 @@ public class MainWindowViewModel : ViewModelBase
             new OpenReportCommand(_mediator, pageNavigatorService);
         _copyToClipboardCommand = new CopyToClipboardCommand(_mediator);
         _resetCarsCommand = new ResetCarsCommand(_mediator);
+        _openStartPageCommand = new OpenStartPageCommand(pageNavigatorService, _mediator);
+        _openCarNumberPageCommand = new OpenCarNumberPageCommand(_mediator, pageNavigatorService);
     }
 
     public BaseMainWindowCommand SaveReportCommand => _saveReportCommand;
@@ -41,4 +44,15 @@ public class MainWindowViewModel : ViewModelBase
     public BaseMainWindowCommand OpenReportCommand => _openReportCommand;
     public BaseMainWindowCommand CopyToClipboardCommand => _copyToClipboardCommand;
     public BaseMainWindowCommand ResetCarsCommand => _resetCarsCommand;
+    public BaseMainWindowCommand OpenStartPageCommand => _openStartPageCommand;
+    public BaseMainWindowCommand OpenCarNumberPageCommand => _openCarNumberPageCommand;
+
+    public void RaiseCanExecuteChanged()
+    {
+        OpenReportSettingsPageCommand.RaiseCanExecuteChanged();
+        OpenReportPageCommand.RaiseCanExecuteChanged();
+        CopyToClipboardCommand.RaiseCanExecuteChanged();
+        OpenStartPageCommand.RaiseCanExecuteChanged();
+        SaveReportCommand.RaiseCanExecuteChanged();
+    }
 }

@@ -25,9 +25,10 @@ public class ReportChooseCommand<T> : ICommand where T : IReportBuilder, new()
     {
         _mediator.SetReportBuilder(new T());
 
-        _navigationServie.NavigateTo(new ReportPage.ReportPage(_mediator, 
-            !_mediator.StartPageViewModel.OpenReport));
+        _navigationServie.NavigateTo(new ReportPage.ReportPage(
+            _mediator, 
+            _mediator.StartPageViewModel.NeedToReadCar));
 
-        _mediator.StartPageViewModel.OpenReport = false;
+        _mediator.StartPageViewModel.NeedToReadCar = false;
     }
 }

@@ -1,7 +1,5 @@
 ﻿using DAL.FileAccess;
 using Reporter.Configuration;
-using ReporterApp.Core.Cars;
-using ReporterApp.Core.Reports;
 using ReporterApp.WindowApp.Utils;
 using System.Windows.Controls;
 
@@ -16,8 +14,8 @@ public partial class ReportPage : Page
         if (needToReadCars)
         {
             var cars = new CarsFileReader()
-            .ReadOnlyNumbers(FilesConfiguration.GetCarsNumbersFilePath)
-            .Cars ?? [];
+                .ReadOnlyNumbers(FilesConfiguration.GetCarsNumbersFilePath)
+                .Cars ?? [];
 
             mediator.SetCars(cars);
         }

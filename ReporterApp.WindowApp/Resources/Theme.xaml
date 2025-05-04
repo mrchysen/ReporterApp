@@ -3,23 +3,48 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <SolidColorBrush
         x:Key="PrimaryColorBrush"
-        Color="#1E90FF" />
-    <SolidColorBrush
-        x:Key="FontColorBrush"
-        Color="#333333" />
+        Color="#FFFFFF" />
     <SolidColorBrush
         x:Key="SecondaryColorBrush"
-        Color="#87CEFA" />
+        Color="#F5F5F5" />
+    <SolidColorBrush
+        x:Key="BackgroundBrush"
+        Color="#FAFAFA" />
+    <SolidColorBrush
+        x:Key="BorderBrush"
+        Color="#E0E0E0" />
+
+    <SolidColorBrush
+        x:Key="FontColorBrush"
+        Color="#212121" />
+    <SolidColorBrush
+        x:Key="SecondaryFontBrush"
+        Color="#757575" />
+
     <SolidColorBrush
         x:Key="DefaultButtonBrush"
-        Color="#F0F8FF" />
+        Color="#FFFFFF" />
+    <SolidColorBrush
+        x:Key="ButtonBorderBrush"
+        Color="#BDBDBD" />
     <SolidColorBrush
         x:Key="ButtonOnMouse"
-        Color="#ADD8E6" />
+        Color="#EEEEEE" />
+    <SolidColorBrush
+        x:Key="ButtonPressed"
+        Color="#E0E0E0" />
+
     <SolidColorBrush
         x:Key="Success"
-        Color="#2E8B57" />
+        Color="#4CAF50" />
     <SolidColorBrush
         x:Key="Alert"
-        Color="#DC143C" />
+        Color="#F44336" />
+
+    <SolidColorBrush
+        x:Key="AccentColor"
+        Color="#9E9E9E" />
+    <SolidColorBrush
+        x:Key="HighlightBrush"
+        Color="#ECEFF1" />
 </ResourceDictionary>

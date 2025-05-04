@@ -27,7 +27,7 @@ public class StartPageViewModel : ViewModelBase
         _mediator = mediator;
     }
 
-    public bool OpenReport { get; set; }
+    public bool NeedToReadCar { get; set; } = true;
 
     public ICommand DefaultReportCommand => _defaultReportChosenCommand; 
 
