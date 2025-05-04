@@ -1,36 +1,55 @@
-﻿using ReporterApp.Core.Cars;
+﻿using ReporterApp.Core.Reports.Utils;
+using System.Text;
 
 namespace ReporterApp.Core.Reports;
 
-public class GasAndDefaultReportBuilder : BaseReportBuilder
+public class GasAndDefaultReportBuilder : IReportBuilder
 {
+    private StringBuilder _titleSb = new();
+    private StringBuilder _bodySb = new();
+
+    private bool _isTitleAdded = false;
+
     public const string ReportType = "Топливный + стандартный отчёт";
 
-    public GasAndDefaultReportBuilder() : base(null) { }
-
-    public GasAndDefaultReportBuilder(ReportParams? reportParams = null) : base(reportParams) { }
-
-    public override string GetReportType() => ReportType;
-
-    public override BaseReportBuilder AddBodyReportText(List<Car> cars, bool addTitle = false)
+    public IReportBuilder AddBodyReportText(
+        List<Car> cars, 
+        DateTime date,
+        bool addTitle = false)
     {
-        if(addTitle)
-            AddTitle();
+        _titleSb = new();
+        _bodySb = new();
 
-        var defaultBuilder = new DefaultReportBuilder(_reportParams).AddBodyReportText(cars, false);
-        var gasReportBuilder = new GasReportBuilder(_reportParams).AddBodyReportText(cars, false);
+        if (addTitle)
+        {
+            AddTitle(date);
 
-        _report.Body = 
-            defaultBuilder.Build().ToString() +
-            gasReportBuilder.Build().ToString();
+            _isTitleAdded = true;
+        }
+
+        var defaultReport = new DefaultReportBuilder()
+            .AddBodyReportText(cars, date).GetReport();
+        var gasReport = new GasReportBuilder()
+            .AddBodyReportText(cars, date).GetReport();
+
+        _bodySb.Append(defaultReport)
+            .Append('\n')
+            .Append(gasReport);
 
         return this;
     }
 
-    public override BaseReportBuilder AddAdditionalText(string text)
+    public string GetReport()
     {
-        _report.AdditionalInfo.Add(text);
+        return _isTitleAdded ?
+            _titleSb.Append('\n').Append(_bodySb).ToString() :
+            _bodySb.ToString();
+    }
 
-        return this;
+    private void AddTitle(DateTime date)
+    {
+        _titleSb.AppendLine(TitleWithRussianDateConverter.GetTitle(
+            ReportType,
+            date));
     }
 }

@@ -6,16 +6,25 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>Imgs\iconOfApp.ico</ApplicationIcon>
+    <ApplicationIcon>AppImgs\iconOfApp.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Imgs\ok.png" />
-    <None Remove="Imgs\StartPageReportIcon.png" />
+    <Compile Remove="ImgToShow\**" />
+    <EmbeddedResource Remove="ImgToShow\**" />
+    <None Remove="ImgToShow\**" />
+    <Page Remove="ImgToShow\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Imgs\iconOfApp.ico" />
+    <None Remove="AppImgs\ok.png" />
+    <None Remove="AppImgs\StartPageReportIcon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="AppImgs\iconOfApp.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -26,21 +35,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Components\" />
-    <Folder Include="ImgToShow\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\ReporterApp.Core\ReporterApp.Core.csproj" />
     <ProjectReference Include="..\ReporterApp.DAL\ReporterApp.DAL.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Imgs\ok.png">
+    <Resource Include="AppImgs\ok.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Imgs\StartPageReportIcon.png" />
-    <Resource Update="Imgs\StartPageReportIcon.png">
+    <Resource Include="AppImgs\StartPageReportIcon.png" />
+    <Resource Update="AppImgs\StartPageReportIcon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

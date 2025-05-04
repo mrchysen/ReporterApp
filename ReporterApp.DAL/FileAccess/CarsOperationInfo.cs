@@ -6,7 +6,10 @@ public class CarsOperationInfo
 {
     public FileOperationResult Result { get; set; }
 
-    public List<Car>? Cars { get; set; }
+    public List<Car> Cars { get; set; } = new();
 
     public string Message { get; set; } = string.Empty;
+
+    public override string ToString() 
+        => $"{Result.ToString()}: {Message}";
 }

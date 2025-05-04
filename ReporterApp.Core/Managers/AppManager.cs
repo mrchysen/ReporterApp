@@ -7,8 +7,7 @@ namespace ReporterApp.Core.Managers;
 
 public class AppManager
 {
-    private ReportParams _reportParams;
-    private BaseReportBuilder _reportBuilder;
+    private IReportBuilder _reportBuilder;
     private List<Car> _cars;
     private bool _saved = false;
     private CarEnumerator _carIteratorClass;
@@ -19,20 +18,19 @@ public class AppManager
     {
         _cars = cars;
         _carIteratorClass = new(_cars);
-        _reportBuilder = new DefaultReportBuilder(ReportParams);
-    }
+        }
 
     public AppManager(AppManager prototype) : this(prototype.Cars)
     {
         CarsChanged = prototype.CarsChanged;
     }
 
-    public AppManager(AppManager prototype, BaseReportBuilder eeportBuilder) : this(prototype)
-    {
-        _reportBuilder = eeportBuilder;
-    }
+    //public AppManager(AppManager prototype, BaseReportBuilder eeportBuilder) : this(prototype)
+    //{
+    //    _reportBuilder = eeportBuilder;
+    //}
 
-    public string? TypeOfReport => _reportBuilder.GetReportType();
+    //public string? TypeOfReport => _reportBuilder.GetReportType();
 
     public bool IsSetCars 
     {
@@ -79,9 +77,9 @@ public class AppManager
             return _carIteratorClass;
         }
     }
-    public BaseReportBuilder? Builder => _reportBuilder;
+    //public BaseReportBuilder? Builder => _reportBuilder;
 
-    public ReportParams ReportParams { get => _reportParams; set => _reportParams = value; }
+    //public ReportParams ReportParams { get => _reportParams; set => _reportParams = value; }
 
     // For DataBindings \\
     public event PropertyChangedEventHandler PropertyChanged;

@@ -1,10 +1,5 @@
 ﻿using System.Windows;
-using System.IO;
-using System.Text.Json;
-using Reporter.Logic.Configuration;
-using System.Diagnostics;
 using Microsoft.Win32;
-using DAL.FileAccess;
 using ReporterApp.Core.Managers;
 using ReporterApp.Core.Reports;
 using ReporterApp.WindowApp.Pages.NewDesign.StartPage;
@@ -15,16 +10,20 @@ namespace ReporterApp.WindowApp.Windows.Main;
 public partial class MainWindow : Window
 {
     private PageNavigatorService _navigationService;
-    
+    private ViewModelMediator _mediator;
+
     // Manager keeps all data
-    private AppManager _appManager;
+    private AppManager _appManager = null!;
 
     public MainWindow()
     {
         InitializeComponent();
 
         _navigationService = new(Frame);
-        _navigationService.NavigateTo(new StartPage(new(_navigationService)));
+        _mediator = new();
+        _navigationService.NavigateTo(new StartPage(_mediator, _navigationService));
+
+        DataContext = _mediator.CreateMainWindowViewModel(_navigationService);
 
         //var result = new CarsFileReader().ReadOnlyNumbers(_filesConfiguration.GetCarsNumbersFilePath);
 
@@ -33,12 +32,6 @@ public partial class MainWindow : Window
         //_appManager = new(result.Cars == null? [new Car() { Number = "XXX "}] : result.Cars);
     }
 
-    #region Methods
-
-    #region Start Configuration Methods
-    
-    #endregion
-
     #region MenuItem - File - Buttons events
     private void OpenFileButton_Click(object sender, RoutedEventArgs e)
     {
@@ -46,18 +39,18 @@ public partial class MainWindow : Window
         //fileDialog.InitialDirectory = _filesConfiguration.GetDataFolderPath;
         fileDialog.Filter = "(*.json)|*.json|All files (*.*)|*.*";
 
-        if(fileDialog.ShowDialog() == true) 
-        { 
-            string filePath = fileDialog.FileName;
-            
-            var result = new CarsFileReader().ReadJson(filePath);
+        //if (fileDialog.ShowDialog() == true)
+        //{
+        //    string filePath = fileDialog.FileName;
 
-            InfoObjectHandling(result);
+        //    var result = new CarsFileReader().ReadJson(filePath);
 
-            _appManager.Cars = result.Cars;
+        //    InfoObjectHandling(result);
 
-            //PageHandler.Content = new CreatePage(this);
-        }
+        //    _appManager.Cars = result.Cars;
+
+        //    PageHandler.Content = new CreatePage(this);
+        //}
     }
     private void CreateFileButton_Click(object sender, RoutedEventArgs e)
     {
@@ -68,38 +61,38 @@ public partial class MainWindow : Window
     }
     private void SaveFileButton_Click(object sender, RoutedEventArgs e)
     {
-        // code that saves report/car files
-        string directoryPath = Path.Combine(
-            //_filesConfiguration.GetDataFolderPath, 
-            _appManager.ReportParams.Date.Year.ToString(), 
-            _appManager.ReportParams.Date.Month.ToString());
-        string path = Path.Combine(directoryPath, $"{_appManager.ReportParams.Date.ToShortDateString()}.car.json");
+        //// code that saves report/car files
+        //string directoryPath = Path.Combine(
+        //    //_filesConfiguration.GetDataFolderPath, 
+        //    _appManager.ReportParams.Date.Year.ToString(), 
+        //    _appManager.ReportParams.Date.Month.ToString());
+        //string path = Path.Combine(directoryPath, $"{_appManager.ReportParams.Date.ToShortDateString()}.car.json");
 
-        if (!Directory.Exists(directoryPath))
-        {
-            Directory.CreateDirectory(directoryPath);
-        }
+        //if (!Directory.Exists(directoryPath))
+        //{
+        //    Directory.CreateDirectory(directoryPath);
+        //}
 
-        if (File.Exists(path))
-        {
-            var result = MessageBox.Show("Такой файл уже существует. Перезаписать его?", "Информация", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+        //if (File.Exists(path))
+        //{
+        //    var result = MessageBox.Show("Такой файл уже существует. Перезаписать его?", "Информация", MessageBoxButton.YesNo, MessageBoxImage.Warning);
         
-            if(result == MessageBoxResult.No) 
-            {
-                return;
-            }
-        }
+        //    if(result == MessageBoxResult.No) 
+        //    {
+        //        return;
+        //    }
+        //}
 
-        var infoObject = new CarsFileWriter().WriteJson(_appManager.Cars!, path);
+        //var infoObject = new CarsFileWriter().WriteJson(_appManager.Cars!, path);
 
-        InfoObjectHandling(infoObject);
+        //InfoObjectHandling(infoObject);
 
-        MessageBox.Show("Файл сохранён.", "Информация", MessageBoxButton.OK, MessageBoxImage.Warning);
+        //MessageBox.Show("Файл сохранён.", "Информация", MessageBoxButton.OK, MessageBoxImage.Warning);
     }
     private void CopyFileButton_Click(object sender, RoutedEventArgs e)
     {
         // code of copying report into cache of PC
-        Clipboard.SetText(_appManager.Builder.Build().ToString());
+        //Clipboard.SetText(_appManager.Builder.Build().ToString());
     }
     #endregion
 
@@ -143,32 +136,12 @@ public partial class MainWindow : Window
     }
     #endregion
 
-    public void SetReportBuilder(BaseReportBuilder ReportBuilder)
+    public void SetReportBuilder(IReportBuilder ReportBuilder)
     {
-        _appManager = new AppManager(_appManager, ReportBuilder);
-        SetAllEnable();
+        //_appManager = new AppManager(_appManager, ReportBuilder);
+        
 
         //PageHandler.Content = new ReportPage(_appManager);
-    }
-
-    private void SetAllEnable()
-    {
-        MenuFileButton.IsEnabled = true;
-        CopyFileMenuButton.IsEnabled = true;
-        SaveFileButton.IsEnabled = true;
-    }
-
-    private void InfoObjectHandling(CarsOperationInfo result)
-    {
-        if (result.Result == FileOperationResult.Error ||
-            result.Result == FileOperationResult.Info)
-        {
-            MessageBox.Show(
-                result.Message,
-                result.Result.ToString(),
-                MessageBoxButton.OK,
-                MessageBoxImage.None);
-        }
     }
 
     private void ErrorHandling(string message) => MessageBox.Show(
@@ -191,8 +164,6 @@ public partial class MainWindow : Window
         //    InfoObjectHandling(result);
         //}
     }
-
-    #endregion
 
     #endregion
 }

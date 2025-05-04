@@ -4,13 +4,17 @@ using System.Windows.Input;
 
 namespace ReporterApp.WindowApp.Pages.NewDesign.StartPage.Commands;
 
-public class ReportChooseCommand<T> : ICommand where T : BaseReportBuilder, new()
+public class ReportChooseCommand<T> : ICommand where T : IReportBuilder, new()
 {
+    private ViewModelMediator _mediator;
     private PageNavigatorService _navigationServie;
 
-    public ReportChooseCommand(PageNavigatorService navigationServie)
+    public ReportChooseCommand(
+        PageNavigatorService navigationServie, 
+        ViewModelMediator mediator)
     {
         _navigationServie = navigationServie;
+        _mediator = mediator;
     }
 
     public event EventHandler? CanExecuteChanged;
@@ -18,6 +22,7 @@ public class ReportChooseCommand<T> : ICommand where T : BaseReportBuilder, new(
     public bool CanExecute(object? parameter) => true;
 
     public void Execute(object? parameter)
-        => _navigationServie.NavigateTo(new ReportPage.ReportPage(new T()));
-    
+    {
+        _navigationServie.NavigateTo(new ReportPage.ReportPage(new T(), _mediator));
+    }
 }

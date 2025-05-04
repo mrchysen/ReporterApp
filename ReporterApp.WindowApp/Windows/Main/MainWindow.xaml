@@ -6,52 +6,65 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:ReporterApp.WindowApp.Windows.Main"
     mc:Ignorable="d"
-    Title="Отчётник v0.1a" 
-    Height="450" Width="800"
-    MinHeight="450" MinWidth="800"
-    Closed="Window_Closed">
-    
+    Title="Отчётник v0.1"
+    Height="450"
+    Width="800"
+    MinHeight="450"
+    MinWidth="800">
+
     <Window.Resources>
-        <Style TargetType="Menu">
-            <Setter Property="Background" Value="#283044" />
-            <Setter Property="Height" Value="24" />
-            <Setter Property="FontSize" Value="16" />
-        </Style>
-        <Style TargetType="Grid">
-            <Setter Property="Background" Value="#78A1BB"/>
-        </Style>
-        <Style TargetType="MenuItem" x:Key="WhiteForeground">
-            <Setter Property="Foreground" Value="White"></Setter>
-        </Style>
-        <Style TargetType="MenuItem" x:Key="BlackForeground">
-            <Setter Property="Foreground" Value="Black"></Setter>
-        </Style>
-        <Style TargetType="MenuItem" BasedOn="{StaticResource WhiteForeground}" x:Key="LeftBorder">
-            <Setter Property="BorderBrush" Value="White" />
-            <Setter Property="BorderThickness" Value="1 0 0 0" />
+        <Style 
+            TargetType="MenuItem"
+            x:Key="FirstMenuItem">
+            <Setter
+                Property="Background" 
+                Value="{StaticResource SecondaryColorBrush}" />
         </Style>
     </Window.Resources>
     
-    <Grid>
+    <Grid
+        Background="{StaticResource PrimaryColorBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <Menu Grid.Row="0">
-            <MenuItem Header="Файл" Style="{StaticResource WhiteForeground}">
-                <MenuItem Click="OpenFileButton_Click" Header="Открыть" Style="{StaticResource BlackForeground}"/>
-                <MenuItem Click="CreateFileButton_Click" Header="Создать" Style="{StaticResource BlackForeground}"/>
-                <MenuItem x:Name="SaveFileButton" Click="SaveFileButton_Click" Header="Сохранить" Style="{StaticResource BlackForeground}"/>
-                <MenuItem x:Name="CopyFileMenuButton" Click="CopyFileButton_Click" Header="Скопировать в буфер обмена" Style="{StaticResource BlackForeground}"/>
+        <Menu
+            Background="{StaticResource SecondaryColorBrush}"
+            Height="24"
+            FontSize="16">
+            <MenuItem
+                Style="{StaticResource FirstMenuItem}"
+                Header="Файл">
+                <MenuItem 
+                    Click="OpenFileButton_Click"
+                    Command="{Binding OpenReportPageCommand}"
+                    Header="Открыть" />
+                <MenuItem 
+                    Click="CreateFileButton_Click" 
+                    Header="Создать" />
+                <MenuItem 
+                    x:Name="SaveFileButton"
+                    Command="{Binding SaveReportCommand}"
+                    Header="Сохранить" />
+                <MenuItem 
+                    x:Name="CopyFileMenuButton" 
+                    Click="CopyFileButton_Click" 
+                    Header="Скопировать в буфер обмена"/>
             </MenuItem>
 
-            <MenuItem Header="Меню" Style="{StaticResource LeftBorder}" x:Name="MenuFileButton">
-                <MenuItem Click="FilePageItem_Click" Header="Файла" Style="{StaticResource BlackForeground}"/>
-                <MenuItem Click="CarNumberItem_Click"  Header="Машин" Style="{StaticResource BlackForeground}"/>
-                <MenuItem Click="ReportPageItem_Click" Header="Отчёта" Style="{StaticResource BlackForeground}"/>
+            <MenuItem Header="Меню">
+                <MenuItem
+                    Command="{Binding OpenReportSettingsCommand}"
+                    Header="Параметры отчёта" />
+                <MenuItem
+                    
+                    Header="Машин"/>
+                <MenuItem
+                    Command="{Binding OpenReportPageCommand}"
+                    Header="Отчёта"/>
                 <Separator />
-                <MenuItem  Header="Отчистить машины" Click="ResetCarButton_Click" Style="{StaticResource BlackForeground}"/>
+                <MenuItem  Header="Отчистить машины" Click="ResetCarButton_Click" />
             </MenuItem>
         </Menu>
 
@@ -59,8 +72,6 @@
             Grid.Row="1"
             x:Name="Frame"
             NavigationUIVisibility="Hidden" />
-
-
 
     </Grid>
 </Window>

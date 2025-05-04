@@ -3,14 +3,14 @@ using System.Windows.Controls;
 
 namespace ReporterApp.WindowApp.Pages.NewDesign.StartPage;
 
-public record StartPageParams(PageNavigatorService PageNavigatorService);
-
 public partial class StartPage : Page
 {
-    public StartPage(StartPageParams @params)
+    public StartPage(
+        ViewModelMediator Mediator,
+        PageNavigatorService PageNavigatorService)
     {
         InitializeComponent();
 
-        DataContext = new StartPageViewModel(@params.PageNavigatorService);
+        DataContext = Mediator.CreateStartPageViewModel(PageNavigatorService);
     }
 }

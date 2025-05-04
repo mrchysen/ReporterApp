@@ -2,15 +2,19 @@
 using ReporterApp.Core.Reports;
 using ReporterApp.Core.Utils;
 using ReporterApp.WindowApp.Pages.NewDesign.ReportPage.Commands;
+using ReporterApp.WindowApp.Utils;
 using System.Windows.Input;
 
 namespace ReporterApp.WindowApp.Pages.NewDesign.ReportPage;
 
 public class ReportPageViewModel : ViewModelBase
 {
-    private string _reportText = null!;
+    private readonly ViewModelMediator _mediator;
+    private List<Car> _cars;
+    private IReportBuilder _reportBuilder;
     private CarEnumerator _carEnumerator;
-    private BaseReportBuilder _reportBuilder;
+    private string _reportText = null!;
+    private DateTime date;
 
     private ICommand _nextCarCommand;
     private ICommand _prevCarCommand;
@@ -21,11 +25,16 @@ public class ReportPageViewModel : ViewModelBase
     private ICommand _changeParkingCommand;
     private ICommand _changeAddedInfoCommand;
 
-    public ReportPageViewModel(BaseReportBuilder reportBuilder, List<Car> cars)
+    public ReportPageViewModel(
+        IReportBuilder reportBuilder,
+        List<Car> cars,
+        ViewModelMediator mediator)
     {
         _reportBuilder = reportBuilder;
 
         _carEnumerator = new(cars);
+        _cars = cars;
+        _mediator = mediator;
 
         _nextCarCommand = new NextCarCommand(_carEnumerator);
         _prevCarCommand = new PrevCarCommand(_carEnumerator);
@@ -36,7 +45,20 @@ public class ReportPageViewModel : ViewModelBase
         _changeParkingCommand = new ChangeParkingCommand(_carEnumerator);
         _changeAddedInfoCommand = new ChangeAddedInfoCommand(_carEnumerator);
 
-        ReportText = _reportBuilder.AddBodyReportText(cars, true).Build().ToString();
+        date = _mediator.GetFileManagementPageViewModel()!.ReportDate;
+
+        ReportText = _reportBuilder
+            .AddBodyReportText(cars, date, true)
+            .GetReport()!;
+
+        _mediator.GetFileManagementPageViewModel()!.PropertyChanged += (o, e) =>
+        {
+            date = _mediator.GetFileManagementPageViewModel()!.ReportDate;
+
+            ReportText = _reportBuilder
+                                .AddBodyReportText(cars, date, true)
+                                .GetReport()!;
+        };
 
         _carEnumerator.PropertyChanged += (o, e) =>
         {
@@ -50,7 +72,9 @@ public class ReportPageViewModel : ViewModelBase
                 NotifyPropertyChanged("AddedInfoStatus");
                 NotifyPropertyChanged("IsFueled");
 
-                ReportText = _reportBuilder.AddBodyReportText(cars, true).Build().ToString();
+                ReportText = _reportBuilder
+                                .AddBodyReportText(cars, date, true)
+                                .GetReport()!;
             }
         };
     }
@@ -63,10 +87,13 @@ public class ReportPageViewModel : ViewModelBase
     public bool AddedInfoStatus => _carEnumerator.Current.AddInformation.Count > 0;
     public bool IsFueled => CarUtils.IsCarWasFueled(_carEnumerator.Current);
 
-    public string ReportText 
-    { 
+    public IReportBuilder Builder => _reportBuilder;
+    public List<Car> Cars => _cars;
+
+    public string ReportText
+    {
         get => _reportText;
-        set 
+        set
         {
             _reportText = value;
             NotifyPropertyChanged();

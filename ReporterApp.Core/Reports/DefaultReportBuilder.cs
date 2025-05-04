@@ -1,23 +1,31 @@
-﻿using System.Text;
+﻿using ReporterApp.Core.Reports.Utils;
+using System.Text;
 
 namespace ReporterApp.Core.Reports;
 
-public class DefaultReportBuilder : BaseReportBuilder
+public class DefaultReportBuilder : IReportBuilder
 {
+    private StringBuilder _titleSb = new();
+    private StringBuilder _bodySb = new();
+
+    private bool _isTitleAdded = false;
+
     public const string ReportType = "Стандартный отчёт";
 
-    public DefaultReportBuilder() : base(null) { }
-
-    public DefaultReportBuilder(ReportParams? reportParams = null) : base(reportParams) { }
-
-    public override string GetReportType() => ReportType;
-
-    public override BaseReportBuilder AddBodyReportText(List<Car> cars, bool addTitle = false)
+    public IReportBuilder AddBodyReportText(
+        List<Car> cars,
+        DateTime date,
+        bool addTitle = false)
     {
-        if(addTitle)
-            AddTitle();
+        _titleSb = new();
+        _bodySb = new();
 
-        StringBuilder sb = new();
+        if (addTitle)
+        {
+            AddTitle(date);
+
+            _isTitleAdded = true;
+        }
 
         foreach(Car car in cars.Where(c => c.IsWorked)) 
         {
@@ -44,8 +52,8 @@ public class DefaultReportBuilder : BaseReportBuilder
             }
 
             carSb.Append("ок.");
-            
-            sb.AppendLine($"{car.Number} {carSb.ToString()}");
+
+            _bodySb.AppendLine($"{car.Number} {carSb.ToString()}");
         }
 
         var cars24kmNumbers = cars
@@ -55,7 +63,7 @@ public class DefaultReportBuilder : BaseReportBuilder
 
         if (cars24kmNumbers.Count > 0)
         {
-            sb.AppendLine()
+            _bodySb.AppendLine()
               .Append(string.Join(", ", cars24kmNumbers))
               .AppendLine(cars24kmNumbers.Count == 1 ? 
               " ездил на 20 км енисейского тракта." : 
@@ -78,21 +86,26 @@ public class DefaultReportBuilder : BaseReportBuilder
                 return "стоянок";
             });
 
-            sb.AppendLine()
+            _bodySb.AppendLine()
               .AppendLine("Стоянки:")
               .AppendLine(string.Join('\n', parkingCars.Select(c => 
               $"{c.Number} {c.Parking.Count} {parkingWord(c.Parking.Count)}({string.Join(" мин, ", c.Parking)} мин).")));
         }
 
-        _report.Body = sb.ToString();
-
         return this;
     }
 
-    public override BaseReportBuilder AddAdditionalText(string text)
+    public string GetReport()
     {
-        _report.AdditionalInfo.Add(text);
+        return _isTitleAdded ? 
+            _titleSb.Append('\n').Append(_bodySb).ToString() :
+            _bodySb.ToString();
+    }
 
-        return this;
+    private void AddTitle(DateTime date)
+    {
+        _titleSb.AppendLine(TitleWithRussianDateConverter.GetTitle(
+            ReportType,
+            date));
     }
 }

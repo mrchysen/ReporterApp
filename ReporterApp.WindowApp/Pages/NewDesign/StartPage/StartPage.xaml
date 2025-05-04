@@ -80,7 +80,7 @@
                     Margin="0 32 0 0">
 
                     <Image
-                        Source=".\..\..\..\Imgs\StartPageReportIcon.png"
+                        Source=".\..\..\..\AppImgs\StartPageReportIcon.png"
                         Width="128" />
 
                     <TextBlock

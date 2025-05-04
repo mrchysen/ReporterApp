@@ -8,15 +8,23 @@ namespace ReporterApp.WindowApp.Pages.NewDesign.StartPage;
 
 public class StartPageViewModel : ViewModelBase
 {
+    private ViewModelMediator _mediator;
+
     private ICommand _gasReportChosenCommand;
     private ICommand _defaultReportChosenCommand;
     private ICommand _gasAndDefaultReportChosenCommand;
-
-    public StartPageViewModel(PageNavigatorService pageNavigatorService)
+    
+    public StartPageViewModel(
+        PageNavigatorService pageNavigatorService, 
+        ViewModelMediator mediator)
     {
-        _gasReportChosenCommand = new ReportChooseCommand<GasReportBuilder>(pageNavigatorService);
-        _defaultReportChosenCommand = new ReportChooseCommand<DefaultReportBuilder>(pageNavigatorService);
-        _gasAndDefaultReportChosenCommand = new ReportChooseCommand<GasAndDefaultReportBuilder>(pageNavigatorService);
+        _gasReportChosenCommand = 
+            new ReportChooseCommand<GasReportBuilder>(pageNavigatorService, mediator);
+        _defaultReportChosenCommand = 
+            new ReportChooseCommand<DefaultReportBuilder>(pageNavigatorService, mediator);
+        _gasAndDefaultReportChosenCommand = 
+            new ReportChooseCommand<GasAndDefaultReportBuilder>(pageNavigatorService, mediator);
+        _mediator = mediator;
     }
 
     public ICommand DefaultReportCommand => _defaultReportChosenCommand; 
