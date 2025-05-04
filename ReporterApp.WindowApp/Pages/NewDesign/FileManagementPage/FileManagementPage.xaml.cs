@@ -10,6 +10,6 @@ public partial class FileManagementPage : Page
     {
         InitializeComponent();
 
-        DataContext = mediator.CreateFileManagementPageViewModel();
+        DataContext = mediator.FileManagementPageViewModel;
     }
 }

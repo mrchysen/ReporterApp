@@ -11,10 +11,10 @@ public class ReportPageViewModel : ViewModelBase
 {
     private readonly ViewModelMediator _mediator;
     private List<Car> _cars;
-    private IReportBuilder _reportBuilder;
+    private IReportBuilder? _reportBuilder;
     private CarEnumerator _carEnumerator;
     private string _reportText = null!;
-    private DateTime date;
+    private DateTime _date;
 
     private ICommand _nextCarCommand;
     private ICommand _prevCarCommand;
@@ -26,38 +26,34 @@ public class ReportPageViewModel : ViewModelBase
     private ICommand _changeAddedInfoCommand;
 
     public ReportPageViewModel(
+        ViewModelMediator mediator,
         IReportBuilder reportBuilder,
-        List<Car> cars,
-        ViewModelMediator mediator)
+        List<Car>? cars = null)
     {
         _reportBuilder = reportBuilder;
 
-        _carEnumerator = new(cars);
-        _cars = cars;
+        _cars = cars ?? [];
+        _carEnumerator = new(_cars ?? []);
         _mediator = mediator;
 
         _nextCarCommand = new NextCarCommand(_carEnumerator);
         _prevCarCommand = new PrevCarCommand(_carEnumerator);
-        _workStatusChangeCommand = new WorkStatusChangeCommand(_carEnumerator);
         _changeFuelCommand = new ChangeFuelCommand(_carEnumerator);
         _photoAddedCommand = new PhotoAddedCommand(_carEnumerator);
-        _change24ETStatusCommand = new Change24ETStatusCommand(_carEnumerator);
         _changeParkingCommand = new ChangeParkingCommand(_carEnumerator);
         _changeAddedInfoCommand = new ChangeAddedInfoCommand(_carEnumerator);
+        _change24ETStatusCommand = new Change24ETStatusCommand(_carEnumerator);
+        _workStatusChangeCommand = new WorkStatusChangeCommand(_carEnumerator);
 
-        date = _mediator.GetFileManagementPageViewModel()!.ReportDate;
+        _date = _mediator.FileManagementPageViewModel.ReportDate;
 
-        ReportText = _reportBuilder
-            .AddBodyReportText(cars, date, true)
-            .GetReport()!;
+        CreateReportText();
 
-        _mediator.GetFileManagementPageViewModel()!.PropertyChanged += (o, e) =>
+        _mediator.FileManagementPageViewModel.PropertyChanged += (o, e) =>
         {
-            date = _mediator.GetFileManagementPageViewModel()!.ReportDate;
+            _date = _mediator.FileManagementPageViewModel.ReportDate;
 
-            ReportText = _reportBuilder
-                                .AddBodyReportText(cars, date, true)
-                                .GetReport()!;
+            CreateReportText();
         };
 
         _carEnumerator.PropertyChanged += (o, e) =>
@@ -72,9 +68,7 @@ public class ReportPageViewModel : ViewModelBase
                 NotifyPropertyChanged("AddedInfoStatus");
                 NotifyPropertyChanged("IsFueled");
 
-                ReportText = _reportBuilder
-                                .AddBodyReportText(cars, date, true)
-                                .GetReport()!;
+                CreateReportText();
             }
         };
     }
@@ -87,8 +81,27 @@ public class ReportPageViewModel : ViewModelBase
     public bool AddedInfoStatus => _carEnumerator.Current.AddInformation.Count > 0;
     public bool IsFueled => CarUtils.IsCarWasFueled(_carEnumerator.Current);
 
-    public IReportBuilder Builder => _reportBuilder;
-    public List<Car> Cars => _cars;
+    public IReportBuilder? Builder
+    {
+        get => _reportBuilder;
+        set
+        {
+            _reportBuilder = value;
+            CreateReportText();
+        }
+    }
+
+    public List<Car> Cars
+    {
+        get => _cars;
+        set
+        {
+            _cars = value;
+            _carEnumerator.Cars = _cars;
+
+            CreateReportText();
+        }
+    }
 
     public string ReportText
     {
@@ -108,4 +121,13 @@ public class ReportPageViewModel : ViewModelBase
     public ICommand Change24ETStatusCommand => _change24ETStatusCommand;
     public ICommand ChangeParkingCommand => _changeParkingCommand;
     public ICommand ChangeAddedInfoCommand => _changeAddedInfoCommand;
+
+    public void ResetCarInEnumerator() => _carEnumerator.Reset();
+
+    private void CreateReportText()
+    {
+        ReportText = _reportBuilder?
+            .AddBodyReportText(_cars, _date, true)
+            .GetReport()!;
+    }
 }

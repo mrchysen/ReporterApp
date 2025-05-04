@@ -23,6 +23,11 @@ public class ReportChooseCommand<T> : ICommand where T : IReportBuilder, new()
 
     public void Execute(object? parameter)
     {
-        _navigationServie.NavigateTo(new ReportPage.ReportPage(new T(), _mediator));
+        _mediator.SetReportBuilder(new T());
+
+        _navigationServie.NavigateTo(new ReportPage.ReportPage(_mediator, 
+            !_mediator.StartPageViewModel.OpenReport));
+
+        _mediator.StartPageViewModel.OpenReport = false;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using DAL.FileAccess;
 using Reporter.Configuration;
+using ReporterApp.Core.Managers;
 using ReporterApp.WindowApp.Utils;
 using System.Diagnostics;
 using System.IO;
@@ -17,13 +18,12 @@ public class SaveReportCommand : BaseMainWindowCommand
     }
 
     public override bool CanExecute(object? parameter)
-        => _mediator.GetReportPageViewModel() != null &&
-        _mediator.GetFileManagementPageViewModel() != null;
+        => _mediator.ReportPageViewModel.Builder != null;
 
     public override void Execute(object? parameter)
     {
         // code that saves car files
-        var date = _mediator.GetFileManagementPageViewModel()!.ReportDate;
+        var date = _mediator.FileManagementPageViewModel.ReportDate;
 
         string directoryPath = Path.Combine(
             FilesConfiguration.GetDataFolderPath, 
@@ -47,11 +47,12 @@ public class SaveReportCommand : BaseMainWindowCommand
             }
         }
 
-        var cars = _mediator.GetReportPageViewModel()!.Cars;
+        var cars = _mediator.ReportPageViewModel.Cars;
 
         var infoObject = new CarsFileWriter().WriteJson(cars, path);
-
         Debug.WriteLine(infoObject);
+
+        Clipboard.SetText(_mediator.ReportPageViewModel.ReportText);
 
         MessageBox.Show(
             "Файл сохранён.", 

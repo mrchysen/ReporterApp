@@ -9,7 +9,7 @@ namespace ReporterApp.WindowApp.Windows.Main;
 
 public partial class MainWindow : Window
 {
-    private PageNavigatorService _navigationService;
+    private PageNavigatorService _pageNavigationService;
     private ViewModelMediator _mediator;
 
     // Manager keeps all data
@@ -19,11 +19,11 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
 
-        _navigationService = new(Frame);
-        _mediator = new();
-        _navigationService.NavigateTo(new StartPage(_mediator, _navigationService));
+        _pageNavigationService = new(Frame);
+        _mediator = new(_pageNavigationService);
+        _pageNavigationService.NavigateTo(new StartPage(_mediator));
 
-        DataContext = _mediator.CreateMainWindowViewModel(_navigationService);
+        DataContext = _mediator.MainWindowViewModel;
 
         //var result = new CarsFileReader().ReadOnlyNumbers(_filesConfiguration.GetCarsNumbersFilePath);
 
@@ -55,7 +55,7 @@ public partial class MainWindow : Window
     private void CreateFileButton_Click(object sender, RoutedEventArgs e)
     {
         // code of creating new file with reports
-        _appManager = new AppManager(_appManager);
+        //_appManager = new AppManager(_appManager);
 
         //PageHandler.Content = new CreatePage(this);
     }

@@ -6,11 +6,10 @@ namespace ReporterApp.WindowApp.Pages.NewDesign.StartPage;
 public partial class StartPage : Page
 {
     public StartPage(
-        ViewModelMediator Mediator,
-        PageNavigatorService PageNavigatorService)
+        ViewModelMediator Mediator)
     {
         InitializeComponent();
 
-        DataContext = Mediator.CreateStartPageViewModel(PageNavigatorService);
+        DataContext = Mediator.StartPageViewModel;
     }
 }

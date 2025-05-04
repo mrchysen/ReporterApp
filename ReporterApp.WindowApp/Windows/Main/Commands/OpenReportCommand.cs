@@ -1,6 +1,7 @@
 ﻿using DAL.FileAccess;
 using Microsoft.Win32;
 using Reporter.Configuration;
+using ReporterApp.Core.Reports;
 using ReporterApp.WindowApp.Pages.NewDesign;
 using ReporterApp.WindowApp.Pages.NewDesign.StartPage;
 using ReporterApp.WindowApp.Utils;
@@ -35,12 +36,21 @@ public class OpenReportCommand : BaseMainWindowCommand
 
             Debug.WriteLine(result);
 
-            var builder = _mediator.GetReportPageViewModel()!.Builder;
-
-            _mediator.CreateReportPageViewModel(builder, result.Cars);
+            _mediator.SetCars(result.Cars);
+            _mediator.SetOpenReportStatus();
+            _mediator.SetDate(ParseDateFromFilePath(filePath));
 
             _pageNavigatorService.NavigateTo(
-                new StartPage(_mediator, _pageNavigatorService));
+                new StartPage(_mediator));
         }
+    }
+
+    public DateTime ParseDateFromFilePath(string filePath)
+    {
+        var subStr = filePath.Replace(".car.json", "");
+        var index = subStr.LastIndexOf("\\");
+        var dateStr = subStr.Substring(index).Replace("\\", "");
+
+        return DateTime.Parse(dateStr);
     }
 }

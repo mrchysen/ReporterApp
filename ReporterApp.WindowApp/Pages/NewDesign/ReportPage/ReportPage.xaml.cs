@@ -9,23 +9,20 @@ namespace ReporterApp.WindowApp.Pages.NewDesign.ReportPage;
 
 public partial class ReportPage : Page
 {
-    private readonly ViewModelMediator _mediator;
-    private readonly IReportBuilder _builder;
-
-    public ReportPage(
-        IReportBuilder builder, 
-        ViewModelMediator mediator)
+    public ReportPage(ViewModelMediator mediator, bool needToReadCars = true)
     {
         InitializeComponent();
 
-        _builder = builder;
-        _mediator = mediator;
-
-        var cars = new CarsFileReader()
+        if (needToReadCars)
+        {
+            var cars = new CarsFileReader()
             .ReadOnlyNumbers(FilesConfiguration.GetCarsNumbersFilePath)
             .Cars ?? [];
 
-        DataContext = mediator.CreateReportPageViewModel(_builder, cars);
+            mediator.SetCars(cars);
+        }
+
+        DataContext = mediator.ReportPageViewModel;
 
         CarIteratorComponent.DataContext = DataContext;
     }

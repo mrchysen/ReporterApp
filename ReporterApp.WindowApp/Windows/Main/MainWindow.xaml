@@ -38,7 +38,7 @@
                 Header="Файл">
                 <MenuItem 
                     Click="OpenFileButton_Click"
-                    Command="{Binding OpenReportPageCommand}"
+                    Command="{Binding OpenReportCommand}"
                     Header="Открыть" />
                 <MenuItem 
                     Click="CreateFileButton_Click" 
@@ -48,14 +48,14 @@
                     Command="{Binding SaveReportCommand}"
                     Header="Сохранить" />
                 <MenuItem 
-                    x:Name="CopyFileMenuButton" 
-                    Click="CopyFileButton_Click" 
+                    x:Name="CopyFileMenuButton"
+                    Command="{Binding CopyToClipboardCommand}" 
                     Header="Скопировать в буфер обмена"/>
             </MenuItem>
 
             <MenuItem Header="Меню">
                 <MenuItem
-                    Command="{Binding OpenReportSettingsCommand}"
+                    Command="{Binding OpenReportSettingsPageCommand}"
                     Header="Параметры отчёта" />
                 <MenuItem
                     
@@ -64,7 +64,9 @@
                     Command="{Binding OpenReportPageCommand}"
                     Header="Отчёта"/>
                 <Separator />
-                <MenuItem  Header="Отчистить машины" Click="ResetCarButton_Click" />
+                <MenuItem
+                    Command="{Binding ResetCarsCommand}"
+                    Header="Отчистить машины" />
             </MenuItem>
         </Menu>
 

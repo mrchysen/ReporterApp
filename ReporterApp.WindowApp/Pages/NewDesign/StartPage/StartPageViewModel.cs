@@ -15,8 +15,8 @@ public class StartPageViewModel : ViewModelBase
     private ICommand _gasAndDefaultReportChosenCommand;
     
     public StartPageViewModel(
-        PageNavigatorService pageNavigatorService, 
-        ViewModelMediator mediator)
+        ViewModelMediator mediator,
+        PageNavigatorService pageNavigatorService)
     {
         _gasReportChosenCommand = 
             new ReportChooseCommand<GasReportBuilder>(pageNavigatorService, mediator);
@@ -26,6 +26,8 @@ public class StartPageViewModel : ViewModelBase
             new ReportChooseCommand<GasAndDefaultReportBuilder>(pageNavigatorService, mediator);
         _mediator = mediator;
     }
+
+    public bool OpenReport { get; set; }
 
     public ICommand DefaultReportCommand => _defaultReportChosenCommand; 
 

@@ -6,70 +6,51 @@ using ReporterApp.WindowApp.Windows.Main;
 
 namespace ReporterApp.WindowApp.Utils;
 
-public class ViewModelMediator : IReportPageViewModelMediator, IStartPageViewModel
+public class ViewModelMediator
 {
-    private ReportPageViewModel? _reportPageViewModel;
-    private StartPageViewModel? _startPageViewModel;
-    private MainWindowViewModel? _mainWindowViewModel;
-    private FileManagementPageViewModel? _fileManagementPageViewModel;
+    private ReportPageViewModel _reportPageViewModel;
+    private StartPageViewModel _startPageViewModel;
+    private MainWindowViewModel _mainWindowViewModel;
+    private FileManagementPageViewModel _fileManagementPageViewModel;
 
-    public ReportPageViewModel? GetReportPageViewModel()
+    public ViewModelMediator(
+        PageNavigatorService pageNavigatorService)
+    {
+        _fileManagementPageViewModel = new();
+        _reportPageViewModel = new(this, new DefaultReportBuilder());
+        _startPageViewModel = new(this, pageNavigatorService);
+        _mainWindowViewModel = new(this, pageNavigatorService);
+    }
+
+    public ReportPageViewModel ReportPageViewModel
         => _reportPageViewModel;
 
-    public StartPageViewModel? GetStartPageViewModel()
+    public StartPageViewModel StartPageViewModel
         => _startPageViewModel;
 
-    public MainWindowViewModel? GetMainWindowViewModel()
+    public MainWindowViewModel MainWindowViewModel
         => _mainWindowViewModel;
 
-    public FileManagementPageViewModel? GetFileManagementPageViewModel()
+    public FileManagementPageViewModel FileManagementPageViewModel
         => _fileManagementPageViewModel;
 
-    public ReportPageViewModel CreateReportPageViewModel(
-        IReportBuilder builder,
-        List<Car> cars,
-        bool createNew = false)
+    public void SetReportBuilder(IReportBuilder builder)
     {
-        _fileManagementPageViewModel = _fileManagementPageViewModel ?? new();
-        _reportPageViewModel = createNew ? new(builder, cars, this) : _reportPageViewModel ?? new(builder, cars, this);
-
-        GetMainWindowViewModel()?.OpenReportSettingsCommand.RaiseCanExecuteChanged();
-        GetMainWindowViewModel()?.OpenReportPageCommand.RaiseCanExecuteChanged();
-        GetMainWindowViewModel()?.SaveReportCommand.RaiseCanExecuteChanged();
-
-        return _reportPageViewModel;
+        _reportPageViewModel.Builder = builder;
     }
 
-    public StartPageViewModel CreateStartPageViewModel(
-        PageNavigatorService pageNavigatorService)
+    public void SetCars(List<Car> cars)
     {
-        _startPageViewModel = _startPageViewModel ?? new(pageNavigatorService, this);
-
-        return _startPageViewModel;
+        _reportPageViewModel.Cars = cars;
     }
 
-    public MainWindowViewModel CreateMainWindowViewModel(
-        PageNavigatorService pageNavigatorService)
+    public void SetOpenReportStatus()
     {
-        _mainWindowViewModel = _mainWindowViewModel ?? new(this, pageNavigatorService);
-
-        return _mainWindowViewModel;
+        _startPageViewModel.OpenReport = true;
     }
 
-    public FileManagementPageViewModel CreateFileManagementPageViewModel()
+    public void SetDate(DateTime date) 
     {
-        _fileManagementPageViewModel = _fileManagementPageViewModel ?? new();
-
-        return _fileManagementPageViewModel;
+        _fileManagementPageViewModel.ReportDate = date;
     }
-}
-
-internal interface IStartPageViewModel
-{
-    public StartPageViewModel? GetStartPageViewModel();
-}
-
-internal interface IReportPageViewModelMediator
-{
-    public ReportPageViewModel? GetReportPageViewModel();
 }
