@@ -9,6 +9,11 @@ public static class StringBuilderExtension
 
     public static StringBuilder EnsureLastLfRemoved(this StringBuilder sb)
     {
+        if(sb.Length == 0)
+        {
+            return sb;
+        }
+
         var lastChar = sb[^1];
 
         if(lastChar == '\n')
