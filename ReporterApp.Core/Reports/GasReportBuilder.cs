@@ -52,9 +52,11 @@ public class GasReportBuilder : IReportBuilder
 
     public string GetReport()
     {
-        return _isTitleAdded ?
-            _titleSb.Append('\n').Append(_bodySb).ToString() :
-            _bodySb.ToString();
+        var sb = _isTitleAdded ?
+            _titleSb.Append('\n').Append(_bodySb) :
+            _bodySb;
+
+        return sb.RemoveAllCr().EnsureLastLfRemoved().ToString();
     }
 
     private void AddTitle(DateTime date)

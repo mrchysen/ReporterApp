@@ -57,9 +57,9 @@ public class ViewModelMediator
         }
     }
 
-    public void SetOpenReportStatus()
+    public void SetOpenReportStatus(bool needToReadCar = true)
     {
-        _startPageViewModel.NeedToReadCar = true;
+        _startPageViewModel.NeedToReadCar = needToReadCar;
     }
 
     public void SetDate(DateTime date) 

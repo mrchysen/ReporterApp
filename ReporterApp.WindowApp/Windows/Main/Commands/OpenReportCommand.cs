@@ -37,7 +37,7 @@ public class OpenReportCommand : BaseMainWindowCommand
             Debug.WriteLine(result);
 
             _mediator.SetCars(result.Cars);
-            _mediator.SetOpenReportStatus();
+            _mediator.SetOpenReportStatus(needToReadCar: false);
             _mediator.SetDate(ParseDateFromFilePath(filePath));
 
             _pageNavigatorService.NavigateTo(
