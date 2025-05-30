@@ -13,6 +13,9 @@ public class CopyToClipboardCommand : BaseMainWindowCommand
         _mediator = mediator;
     }
 
+    public override bool CanExecute(object? parameter)
+        => _mediator.ReportPageViewModel.Builder != null;
+
     public override void Execute(object? parameter)
     {
         Clipboard.SetText(_mediator.ReportPageViewModel.ReportText);
