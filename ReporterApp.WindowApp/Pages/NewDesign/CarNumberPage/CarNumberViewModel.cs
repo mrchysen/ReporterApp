@@ -1,20 +1,29 @@
 ﻿using DAL.FileAccess;
 using Reporter.Configuration;
 using ReporterApp.Core.Utils;
+using ReporterApp.DAL.FileAccess;
 using ReporterApp.WindowApp.Pages.NewDesign.CarNumberPage.Commands;
 using ReporterApp.WindowApp.Utils;
-using System.Security.Permissions;
 using System.Windows;
 
 namespace ReporterApp.WindowApp.Pages.NewDesign.CarNumberPage;
 
-public class CarNumberViewModel : ViewModelBase
+public interface ICarNumberViewModel
+{
+    string NumberText { get; set; }
+    
+    SaveCommand SaveCommand { get; }
+
+    Visibility ImageVisibility { get; set; }
+}
+
+public class CarNumberViewModel : ViewModelBase, ICarNumberViewModel
 {
     private ViewModelMediator _mediator;
     private SaveCommand _saveCommand;
 
     private string _numberText = string.Empty;
-    private Visibility _visibility = Visibility.Hidden;
+    private Visibility _imageVisibility = Visibility.Hidden;
 
     public CarNumberViewModel(ViewModelMediator mediator)
     {
@@ -26,7 +35,7 @@ public class CarNumberViewModel : ViewModelBase
 
         NumberText = string.Join("\r\n", cars.Select(x => x.Number));
 
-        _saveCommand = new SaveCommand(this, mediator);
+        _saveCommand = new SaveCommand(this, mediator, new CarsFileWriter());
     }
 
     public string NumberText
@@ -41,12 +50,12 @@ public class CarNumberViewModel : ViewModelBase
 
     public SaveCommand SaveCommand => _saveCommand;
 
-    public Visibility Visibility
+    public Visibility ImageVisibility
     {
-        get => _visibility;
+        get => _imageVisibility;
         set
         {
-            _visibility = value;
+            _imageVisibility = value;
             NotifyPropertyChanged();
         }
     }

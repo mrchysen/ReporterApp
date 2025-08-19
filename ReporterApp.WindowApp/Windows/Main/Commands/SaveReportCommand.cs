@@ -1,5 +1,6 @@
 ﻿using DAL.FileAccess;
 using Reporter.Configuration;
+using ReporterApp.DAL.FileAccess;
 using ReporterApp.WindowApp.Utils;
 using System.Diagnostics;
 using System.IO;

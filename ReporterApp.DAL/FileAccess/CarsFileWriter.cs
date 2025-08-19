@@ -1,9 +1,16 @@
-﻿using ReporterApp.Core.Cars;
+﻿using DAL.FileAccess;
 using System.Text.Json;
 
-namespace DAL.FileAccess;
+namespace ReporterApp.DAL.FileAccess;
 
-public class CarsFileWriter
+public interface ICarsFileWriter
+{
+    CarsOperationInfo WriteJson(List<Car> cars, string path);
+
+    CarsOperationInfo WriteCarNumbers(List<Car> cars, string path);
+}
+
+public class CarsFileWriter : ICarsFileWriter
 {
     public CarsOperationInfo WriteJson(List<Car> cars, string path)
     {

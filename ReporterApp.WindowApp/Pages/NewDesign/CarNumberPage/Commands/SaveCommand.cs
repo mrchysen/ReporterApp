@@ -1,21 +1,25 @@
 ﻿using ReporterApp.WindowApp.Utils;
-using System.Windows.Controls;
 using System.Windows;
 using System.Windows.Input;
-using DAL.FileAccess;
 using Reporter.Configuration;
+using ReporterApp.DAL.FileAccess;
 
 namespace ReporterApp.WindowApp.Pages.NewDesign.CarNumberPage.Commands;
 
 public class SaveCommand : ICommand
 {
-    private CarNumberViewModel _carNumberViewModel;
-    private ViewModelMediator _mediator;
+    private ICarNumberViewModel _carNumberViewModel;
+    private IViewModelMediator _mediator;
+    private ICarsFileWriter _carsFileWriter;
 
-    public SaveCommand(CarNumberViewModel carNumberViewModel, ViewModelMediator mediator)
+    public SaveCommand(
+        ICarNumberViewModel carNumberViewModel, 
+        IViewModelMediator mediator,
+        ICarsFileWriter carsFileWriter)
     {
         _carNumberViewModel = carNumberViewModel;
         _mediator = mediator;
+        _carsFileWriter = carsFileWriter;
     }
 
     public event EventHandler? CanExecuteChanged;
@@ -24,17 +28,31 @@ public class SaveCommand : ICommand
 
     public void Execute(object? parameter)
     {
-        var cars = _carNumberViewModel.NumberText
+        var carsWithNewNumbers = _carNumberViewModel.NumberText
             .Split("\r\n", StringSplitOptions.RemoveEmptyEntries)
             .Select(num => new Car() { Number = num })
             .ToList();
 
-        _mediator.SetCars(cars, true);
+        MergeActualCarsWithNew(_mediator.ReportPageViewModel.Cars, carsWithNewNumbers);
 
-        var carsFileWriter = new CarsFileWriter();
+        _mediator.SetCars(carsWithNewNumbers, true);
 
-        carsFileWriter.WriteCarNumbers(cars, FilesConfiguration.GetCarsNumbersFilePath);
+        var carsFileWriter = _carsFileWriter
+            .WriteCarNumbers(carsWithNewNumbers, FilesConfiguration.GetCarsNumbersFilePath);
 
-        _carNumberViewModel.Visibility = Visibility.Visible;
+        _carNumberViewModel.ImageVisibility = Visibility.Visible;
+    }
+
+    private void MergeActualCarsWithNew(List<Car> oldCarsToMerge, List<Car> newCar)
+    {
+        foreach (var car in oldCarsToMerge) 
+        { 
+            var index = newCar.FindIndex(c => c.Number == car.Number);
+
+            if (index != -1)
+            {
+                car.CloneTo(newCar[index]);
+            }
+        }
     }
 }

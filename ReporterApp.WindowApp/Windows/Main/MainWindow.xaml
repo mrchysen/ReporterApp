@@ -56,7 +56,7 @@
                     Header="Параметры отчёта" />
                 <MenuItem
                     Command="{Binding OpenCarNumberPageCommand}"
-                    Header="Машин"/>
+                    Header="Номера машин"/>
                 <MenuItem
                     Command="{Binding OpenReportPageCommand}"
                     Header="Отчёта"/>

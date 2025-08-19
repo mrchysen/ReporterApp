@@ -9,7 +9,7 @@ namespace ReporterApp.WindowApp.Pages.NewDesign.ReportPage;
 
 public class ReportPageViewModel : ViewModelBase
 {
-    private readonly ViewModelMediator _mediator;
+    private readonly IViewModelMediator _mediator;
     private List<Car> _cars = null!;
     private IReportBuilder? _reportBuilder;
     private CarEnumerator _carEnumerator;
@@ -26,7 +26,7 @@ public class ReportPageViewModel : ViewModelBase
     private ICommand _changeAddedInfoCommand;
 
     public ReportPageViewModel(
-        ViewModelMediator mediator,
+        IViewModelMediator mediator,
         IReportBuilder? reportBuilder = null,
         List<Car>? cars = null)
     {

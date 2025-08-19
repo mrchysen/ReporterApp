@@ -5,7 +5,7 @@ namespace ReporterApp.UnitTests.Core.Cars;
 public class CarEnumeratorTests
 {
     [Fact]
-    public void Constructor_CurrentCarSet_Seccess()
+    public void Constructor_CurrentCarSet_Success()
     {
         // Arrange
         List<Car> cars = [
