@@ -1,8 +1,8 @@
-﻿using AutoFixture;
-using Moq;
+﻿using Moq;
 using ReporterApp.DAL.FileAccess;
 using ReporterApp.WindowApp.Pages.NewDesign.CarNumberPage;
 using ReporterApp.WindowApp.Pages.NewDesign.CarNumberPage.Commands;
+using ReporterApp.WindowApp.Pages.NewDesign.FileManagementPage;
 using ReporterApp.WindowApp.Pages.NewDesign.ReportPage;
 using ReporterApp.WindowApp.Utils;
 
@@ -18,6 +18,9 @@ public class SaveCommandTests
 
     public SaveCommandTests()
     {
+        _mediatorMock.Setup(c => c.FileManagementPageViewModel)
+            .Returns(new FileManagementPageViewModel());
+
         _command = new(
             _carNumberViewModelMock.Object,
             _mediatorMock.Object,
@@ -37,11 +40,18 @@ public class SaveCommandTests
             })
             .ToList();
 
+        var newCar = new Car
+        {
+            Number = "2"
+        };
+
+        var reportVM = new ReportPageViewModel(_mediatorMock.Object, null, cars);
+
         _carNumberViewModelMock.Setup(c => c.NumberText)
-            .Returns($"{cars[0].Number}\r\n{cars[1].Number}");
+            .Returns($"{cars[0].Number}\r\n{newCar.Number}\r\n{cars[1].Number}");
 
         _mediatorMock.Setup(c => c.ReportPageViewModel)
-            .Returns(new Mock<ReportPageViewModel>().Object);
+            .Returns(reportVM);
 
         List<Car> mergedCars = new();
 
@@ -52,10 +62,14 @@ public class SaveCommandTests
         _command.Execute(null);
 
         // Assert
-        foreach (var car in mergedCars) 
-        { 
+        foreach (var car in mergedCars.Where(cars.Contains))
+        {
             Assert.True(car.IsWorked);
             Assert.True(car.Was24kmET);
         }
+
+        Assert.Contains(newCar.Number, mergedCars.Select(s => s.Number));
+
+        _carsFileWriter.Verify(c => c.WriteCarNumbers(It.IsAny<List<Car>>(), It.IsAny<string>()), Times.Once);
     }
 }
