@@ -7,7 +7,21 @@ using ReporterApp.WindowApp.Windows.Main;
 
 namespace ReporterApp.WindowApp.Utils;
 
-public class ViewModelMediator
+public interface IViewModelMediator
+{
+    ReportPageViewModel ReportPageViewModel { get; }
+    StartPageViewModel StartPageViewModel { get; }
+    MainWindowViewModel MainWindowViewModel { get; }
+    FileManagementPageViewModel FileManagementPageViewModel { get; }
+    CarNumberViewModel CarNumberViewModel { get; }
+
+    void SetReportBuilder(IReportBuilder builder);
+    void SetCars(List<Car> cars, bool withReset = false);
+    void SetOpenReportStatus(bool needToReadCar = true);
+    void SetDate(DateTime date);
+}
+
+public class ViewModelMediator : IViewModelMediator
 {
     private ReportPageViewModel _reportPageViewModel;
     private StartPageViewModel _startPageViewModel;
@@ -57,13 +71,9 @@ public class ViewModelMediator
         }
     }
 
-    public void SetOpenReportStatus(bool needToReadCar = true)
-    {
-        _startPageViewModel.NeedToReadCar = needToReadCar;
-    }
+    public void SetOpenReportStatus(bool needToReadCar = true) 
+        => _startPageViewModel.NeedToReadCar = needToReadCar;
 
     public void SetDate(DateTime date) 
-    {
-        _fileManagementPageViewModel.ReportDate = date;
-    }
+        => _fileManagementPageViewModel.ReportDate = date;
 }

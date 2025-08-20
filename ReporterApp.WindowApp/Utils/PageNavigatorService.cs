@@ -2,17 +2,8 @@
 
 namespace ReporterApp.WindowApp.Utils;
 
-public class PageNavigatorService
+public class PageNavigatorService(Frame frame)
 {
-    public Frame _frame;
-
-    public PageNavigatorService(Frame frame)
-    {
-        _frame = frame;
-    }
-
-    public void NavigateTo(Page page)
-    {
-        _frame.Content = page;
-    }
+    public void NavigateTo(Page page) 
+        => frame.Content = page;
 }

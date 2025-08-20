@@ -19,6 +19,8 @@ public class OpenCarNumberPageCommand : BaseMainWindowCommand
 
     public override void Execute(object? parameter)
     {
+        //_mediator.CarNumberViewModel = new();
+
         _pageNavigatorService.NavigateTo(new CarNumberPage(_mediator));
     }
 }

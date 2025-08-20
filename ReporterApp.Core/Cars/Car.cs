@@ -90,4 +90,18 @@ public class Car : ViewModelBase
             NotifyPropertyChanged();
         }
     }
+
+    public Car CloneTo(Car car)
+    {
+        car.Number = _number;
+        car.IsWorked = _isWorked;
+        car.FuelBegin = _fuelBegin;
+        car.FuelEnd = _fuelEnd;
+        car.WasScreen = _wasScreen;
+        car.Was24kmET = _was24kmET;
+        car.Parking = [.. _parking];
+        car.AddInformation = [.. _addInformation];
+
+        return car;
+    }
 }
