@@ -1,6 +1,4 @@
-﻿using ReporterApp.Core.Cars;
-
-namespace DAL.FileAccess;
+﻿namespace DAL.FileAccess;
 
 public class CarsOperationInfo
 {

@@ -1,7 +1,6 @@
 ﻿using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
-using WpfApp;
 
 namespace ReporterApp.WindowApp.Pages.NewDesign.ReportPage.ValueConverters;
 

@@ -4,10 +4,9 @@ using ReporterApp.WindowApp.Configuration;
 using ReporterApp.WindowApp.Windows.Main;
 using System.Diagnostics;
 using System.IO;
-using System.Security.Policy;
 using System.Windows;
 
-namespace WpfApp;
+namespace ReporterApp.WindowApp;
 
 public partial class App : Application
 {
