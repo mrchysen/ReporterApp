@@ -1,5 +1,5 @@
-﻿using System.IO;
-using WpfApp;
+﻿using ReporterApp.WindowApp;
+using System.IO;
 
 namespace Reporter.Configuration;
 
@@ -11,26 +11,35 @@ public static class FilesConfiguration
 
     private static string _windowConfigurationFileName { get; set; } = "Window.config.json";
 
-    private static string _appConfigurationFileName { get; set; } = "App.config.json";
-
+    /// <summary>
+    /// Путь к файлу с номерами машин
+    /// </summary>
     public static string GetCarsNumbersFilePath 
         => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                         App.ApplicationName,
                         _dataFolder, 
                         _carsNumbersFileName);
 
+    /// <summary>
+    /// Путь к папке с данными
+    /// </summary>
     public static string GetDataFolderPath
         => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                         App.ApplicationName,
                         _dataFolder);
 
-    public static string GetWindowConfigurationFolderPath
+    /// <summary>
+    /// Путь к файлу с конфигурацией приложения
+    /// </summary>
+    public static string GetWindowConfigurationFilePath
         => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                         App.ApplicationName,
                         _windowConfigurationFileName);
 
-    public static string GetAppConfigurationFolderPath
+    /// <summary>
+    /// Путь к папке с конфигурацией
+    /// </summary>
+    public static string GetConfigurationFolderPath
         => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                        App.ApplicationName,
-                        _appConfigurationFileName);
+                        App.ApplicationName);
 }

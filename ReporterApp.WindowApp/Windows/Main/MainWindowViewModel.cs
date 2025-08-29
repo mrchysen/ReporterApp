@@ -17,6 +17,8 @@ public class MainWindowViewModel : ViewModelBase
     private BaseMainWindowCommand _resetCarsCommand;
     private BaseMainWindowCommand _openStartPageCommand;
     private BaseMainWindowCommand _openCarNumberPageCommand;
+    private BaseMainWindowCommand _openDataFolderCommand;
+    private BaseMainWindowCommand _openConfigurationFolderCommand;
 
     public MainWindowViewModel(
         ViewModelMediator mediator,
@@ -24,18 +26,16 @@ public class MainWindowViewModel : ViewModelBase
     {
         _mediator = mediator;
 
-        _saveReportCommand = 
-            new SaveReportCommand(_mediator);
-        _openReportSettingsPageCommand = 
-            new OpenReportSettingsPageCommand(pageNavigatorService, _mediator);
-        _openReportPageCommand = 
-            new OpenReportPageCommand(pageNavigatorService, _mediator);
-        _openReportCommand = 
-            new OpenReportCommand(_mediator, pageNavigatorService);
+        _saveReportCommand =new SaveReportCommand(_mediator);
+        _openReportSettingsPageCommand =new OpenReportSettingsPageCommand(pageNavigatorService, _mediator);
+        _openReportPageCommand =new OpenReportPageCommand(pageNavigatorService, _mediator);
+        _openReportCommand =new OpenReportCommand(_mediator, pageNavigatorService);
         _copyToClipboardCommand = new CopyToClipboardCommand(_mediator);
         _resetCarsCommand = new ResetCarsCommand(_mediator);
         _openStartPageCommand = new OpenStartPageCommand(pageNavigatorService, _mediator);
         _openCarNumberPageCommand = new OpenCarNumberPageCommand(_mediator, pageNavigatorService);
+        _openDataFolderCommand = new OpenDataFolderCommand();
+        _openConfigurationFolderCommand = new OpenConfigurationFolderCommand();
     }
 
     public BaseMainWindowCommand SaveReportCommand => _saveReportCommand;
@@ -46,6 +46,8 @@ public class MainWindowViewModel : ViewModelBase
     public BaseMainWindowCommand ResetCarsCommand => _resetCarsCommand;
     public BaseMainWindowCommand OpenStartPageCommand => _openStartPageCommand;
     public BaseMainWindowCommand OpenCarNumberPageCommand => _openCarNumberPageCommand;
+    public BaseMainWindowCommand OpenDataFolderCommand => _openDataFolderCommand;
+    public BaseMainWindowCommand OpenConfigurationFolderCommand => _openConfigurationFolderCommand;
 
     public void RaiseCanExecuteChanged()
     {

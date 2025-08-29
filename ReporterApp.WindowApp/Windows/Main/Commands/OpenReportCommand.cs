@@ -1,8 +1,6 @@
 ﻿using DAL.FileAccess;
 using Microsoft.Win32;
 using Reporter.Configuration;
-using ReporterApp.Core.Reports;
-using ReporterApp.WindowApp.Pages.NewDesign;
 using ReporterApp.WindowApp.Pages.NewDesign.StartPage;
 using ReporterApp.WindowApp.Utils;
 using System.Diagnostics;
@@ -45,7 +43,7 @@ public class OpenReportCommand : BaseMainWindowCommand
         }
     }
 
-    public DateTime ParseDateFromFilePath(string filePath)
+    private DateTime ParseDateFromFilePath(string filePath)
     {
         var subStr = filePath.Replace(".car.json", "");
         var index = subStr.LastIndexOf("\\");

@@ -31,7 +31,7 @@ public class MainWindowConfigurationService
         string json = JsonSerializer.Serialize(configuration);
 
         using var sw = new StreamWriter(
-            FilesConfiguration.GetWindowConfigurationFolderPath, 
+            FilesConfiguration.GetWindowConfigurationFilePath, 
             false);
 
         sw.WriteLine(json);
@@ -54,7 +54,7 @@ public class MainWindowConfigurationService
     public WindowConfiguration GetConfigurationFromFile()
     {
         var pathToConfiguration = 
-            FilesConfiguration.GetWindowConfigurationFolderPath;
+            FilesConfiguration.GetWindowConfigurationFilePath;
 
         if (!File.Exists(pathToConfiguration))
             return new WindowConfiguration();

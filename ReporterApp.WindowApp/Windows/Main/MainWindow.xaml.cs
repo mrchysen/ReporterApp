@@ -8,6 +8,7 @@ public partial class MainWindow : Window
 {
     private PageNavigatorService _pageNavigationService;
     private ViewModelMediator _mediator;
+
     public MainWindow()
     {
         InitializeComponent();
