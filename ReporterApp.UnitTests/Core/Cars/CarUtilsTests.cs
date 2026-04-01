@@ -2,6 +2,9 @@
 
 namespace ReporterApp.UnitTests.Core.Cars;
 
+/// <summary>
+/// Тесты для утилит работы с Car.
+/// </summary>
 public class CarUtilsTests
 {
     [Theory]

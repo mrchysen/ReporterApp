@@ -1,7 +1,11 @@
-﻿using ReporterApp.Core.Reports;
+﻿using ReporterApp.Core.Cars;
+using ReporterApp.Core.Reports;
 
 namespace ReporterApp.UnitTests.Core.Reports;
 
+/// <summary>
+/// Тесты для DefaultReportBuilder.
+/// </summary>
 public class DefaultReportBuilderTests
 {
     [Fact]
@@ -16,8 +20,8 @@ public class DefaultReportBuilderTests
             ];
 
         var date = new DateTime(2025, 5, 10);
-        
-        var expectedReportText = 
+
+        var expectedReportText =
             """
             Стандартный отчёт за 10.05.2025 (Суббота).
 
@@ -29,6 +33,6 @@ public class DefaultReportBuilderTests
         var resultReportText = reportBuilder.AddBodyReportText(cars, date, true).GetReport();
 
         // Assert
-        Assert.Equal(expectedReportText, resultReportText);
+        Assert.Equal(expectedReportText.Replace("\r\n", "\n"), resultReportText);
     }
 }
