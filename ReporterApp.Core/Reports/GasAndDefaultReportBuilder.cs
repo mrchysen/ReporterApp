@@ -33,7 +33,7 @@ public class GasAndDefaultReportBuilder : IReportBuilder
             .AddBodyReportText(cars, date).GetReport();
 
         _bodySb.Append(defaultReport)
-            .Append('\n')
+            .Append("\n\n")
             .Append(gasReport);
 
         return this;
