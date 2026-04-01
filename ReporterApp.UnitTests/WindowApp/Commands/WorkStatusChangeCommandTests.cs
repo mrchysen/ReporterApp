@@ -3,9 +3,6 @@ using ReporterApp.WindowApp.Pages.NewDesign.ReportPage.Commands;
 
 namespace ReporterApp.UnitTests.WindowApp.Commands;
 
-/// <summary>
-/// Тесты для WorkStatusChangeCommand.
-/// </summary>
 public class WorkStatusChangeCommandTests
 {
     [Fact]

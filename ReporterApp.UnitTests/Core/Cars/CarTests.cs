@@ -1,10 +1,5 @@
-using ReporterApp.Core.Cars;
-
 namespace ReporterApp.UnitTests.Core.Cars;
 
-/// <summary>
-/// Тесты для модели Car.
-/// </summary>
 public class CarTests
 {
     [Fact]

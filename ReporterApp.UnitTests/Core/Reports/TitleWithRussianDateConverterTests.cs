@@ -2,9 +2,6 @@ using ReporterApp.Core.Reports.Utils;
 
 namespace ReporterApp.UnitTests.Core.Reports;
 
-/// <summary>
-/// Тесты для конвертера дат в русский формат.
-/// </summary>
 public class TitleWithRussianDateConverterTests
 {
     [Theory]

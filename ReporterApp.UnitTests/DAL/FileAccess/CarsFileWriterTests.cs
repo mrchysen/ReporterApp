@@ -1,13 +1,9 @@
-using ReporterApp.Core.Cars;
 using DAL.FileAccess;
 using ReporterApp.DAL.FileAccess;
 using System.Text.Json;
 
 namespace ReporterApp.UnitTests.DAL.FileAccess;
 
-/// <summary>
-/// Тесты для классов файловых операций.
-/// </summary>
 public class CarsFileWriterTests : IDisposable
 {
     private readonly string _testDirectory;

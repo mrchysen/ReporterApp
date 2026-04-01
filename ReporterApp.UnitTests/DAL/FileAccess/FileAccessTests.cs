@@ -2,9 +2,6 @@ using DAL.FileAccess;
 
 namespace ReporterApp.UnitTests.DAL.FileAccess;
 
-/// <summary>
-/// Тесты для enum FileOperationResult.
-/// </summary>
 public class FileOperationResultTests
 {
     [Fact]
@@ -41,9 +38,6 @@ public class FileOperationResultTests
     }
 }
 
-/// <summary>
-/// Тесты для класса CarsOperationInfo.
-/// </summary>
 public class CarsOperationInfoTests
 {
     [Fact]

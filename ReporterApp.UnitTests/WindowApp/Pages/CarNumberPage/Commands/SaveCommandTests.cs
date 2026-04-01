@@ -1,5 +1,4 @@
 ﻿using Moq;
-using ReporterApp.Core.Cars;
 using ReporterApp.DAL.FileAccess;
 using ReporterApp.WindowApp.Pages.NewDesign.CarNumberPage;
 using ReporterApp.WindowApp.Pages.NewDesign.CarNumberPage.Commands;
@@ -9,9 +8,6 @@ using ReporterApp.WindowApp.Utils;
 
 namespace ReporterApp.UnitTests.WindowApp.Pages.CarNumberPage.Commands;
 
-/// <summary>
-/// Тесты для SaveCommand.
-/// </summary>
 public class SaveCommandTests
 {
     private readonly Mock<ICarNumberViewModel> _carNumberViewModelMock = new();

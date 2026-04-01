@@ -1,11 +1,7 @@
-using ReporterApp.Core.Cars;
 using ReporterApp.Core.Reports;
 
 namespace ReporterApp.UnitTests.Core.Reports;
 
-/// <summary>
-/// Тесты для GasAndDefaultReportBuilder.
-/// </summary>
 public class GasAndDefaultReportBuilderTests
 {
     [Fact]

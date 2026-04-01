@@ -3,9 +3,6 @@ using System.Text;
 
 namespace ReporterApp.UnitTests.Core.Reports;
 
-/// <summary>
-/// Тесты для методов расширения StringBuilder.
-/// </summary>
 public class StringBuilderExtensionTests
 {
     #region RemoveAllCr Tests

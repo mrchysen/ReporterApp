@@ -2,9 +2,6 @@
 
 namespace ReporterApp.UnitTests.Core.Cars;
 
-/// <summary>
-/// Тесты для CarEnumerator.
-/// </summary>
 public class CarEnumeratorTests
 {
     [Fact]
