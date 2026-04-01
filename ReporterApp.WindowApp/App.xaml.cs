@@ -46,7 +46,13 @@ public partial class App : Application
     {
         Directory.CreateDirectory(FilesConfiguration.GetDataFolderPath);
 
+        Debug.WriteLine($"Created directory:{FilesConfiguration.GetDataFolderPath}");
+
         if (!File.Exists(FilesConfiguration.GetCarsNumbersFilePath))
+        {
             File.Create(FilesConfiguration.GetCarsNumbersFilePath);
+
+            Debug.WriteLine($"Created file:{FilesConfiguration.GetCarsNumbersFilePath}");
+        }
     }
 }

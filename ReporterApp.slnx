@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="ReporterApp.Core/ReporterApp.Core.csproj" />
+  <Project Path="ReporterApp.DAL/ReporterApp.DAL.csproj" />
+  <Project Path="ReporterApp.UnitTests/ReporterApp.UnitTests.csproj" />
+  <Project Path="ReporterApp.WindowApp/ReporterApp.WindowApp.csproj" />
+</Solution>
