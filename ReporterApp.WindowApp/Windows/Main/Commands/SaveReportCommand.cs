@@ -25,7 +25,7 @@ public class SaveReportCommand : BaseMainWindowCommand
         var date = _mediator.FileManagementPageViewModel.ReportDate;
 
         string directoryPath = Path.Combine(
-            FilesConfiguration.GetDataFolderPath, 
+            FilesConfiguration.GetDataFolderPath,
             date.Year.ToString(),
             date.Month.ToString());
 
@@ -54,9 +54,9 @@ public class SaveReportCommand : BaseMainWindowCommand
         Clipboard.SetText(_mediator.ReportPageViewModel.ReportText);
 
         MessageBox.Show(
-            "Файл сохранён.", 
-            "Информация", 
-            MessageBoxButton.OK, 
+            "Файл сохранён.",
+            "Информация",
+            MessageBoxButton.OK,
             MessageBoxImage.Warning);
     }
 }

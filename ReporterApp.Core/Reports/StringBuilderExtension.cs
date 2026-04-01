@@ -18,7 +18,7 @@ public static class StringBuilderExtension
 
         if(lastChar == '\n')
         {
-            return sb.Remove(sb.Length - 1, 1);
+            return sb.Remove(sb.Length - 1, 1).EnsureLastLfRemoved();
         }
 
         return sb;

@@ -6,7 +6,7 @@ namespace ReporterApp.WindowApp.Windows.Main.Commands;
 
 public class CopyToClipboardCommand : BaseMainWindowCommand
 {
-    private ViewModelMediator _mediator;
+    private readonly ViewModelMediator _mediator;
 
     public CopyToClipboardCommand(ViewModelMediator mediator)
     {

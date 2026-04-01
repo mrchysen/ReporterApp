@@ -1,9 +1,9 @@
-﻿using ReporterApp.Core.Utils;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections;
 
 namespace ReporterApp.Core.Cars;
 
-public class CarEnumerator : ViewModelBase, IEnumerator<Car>
+public class CarEnumerator : ObservableObject, IEnumerator<Car>
 {
     private List<Car> _cars;
     private int _currentIndex;
@@ -26,7 +26,7 @@ public class CarEnumerator : ViewModelBase, IEnumerator<Car>
 
         _currentIndex = isIndexNeedToBeZero ? _currentIndex + 1 : 0;
         
-        NotifyPropertyChanged("Current");
+        OnPropertyChanged(nameof(Current));
 
         return isIndexNeedToBeZero;
     }
@@ -37,17 +37,17 @@ public class CarEnumerator : ViewModelBase, IEnumerator<Car>
 
         _currentIndex = isIndexNeedToMaximized ? _currentIndex - 1 : _cars.Count - 1;
 
-        NotifyPropertyChanged("Current");
+        OnPropertyChanged(nameof(Current));
 
         return isIndexNeedToMaximized;
     }
 
-    public void NotifyCurrentChanged() => NotifyPropertyChanged("Current");
+    public void NotifyCurrentChanged() => OnPropertyChanged(nameof(Current));
 
     public void Reset()
     {
         _currentIndex = 0;
 
-        NotifyPropertyChanged("Current");
+        OnPropertyChanged(nameof(Current));
     }
 }

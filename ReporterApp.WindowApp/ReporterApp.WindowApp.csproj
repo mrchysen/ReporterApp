@@ -10,6 +10,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="ImgToShow\**" />
     <EmbeddedResource Remove="ImgToShow\**" />
     <None Remove="ImgToShow\**" />
@@ -28,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    
+
     <None Update="window.config.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

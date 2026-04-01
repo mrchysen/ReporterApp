@@ -1,37 +1,52 @@
-﻿using ReporterApp.Core.Reports;
-using ReporterApp.Core.Utils;
-using ReporterApp.WindowApp.Pages.NewDesign.StartPage.Commands;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using ReporterApp.Core.Reports;
 using ReporterApp.WindowApp.Utils;
-using System.Windows.Input;
 
 namespace ReporterApp.WindowApp.Pages.NewDesign.StartPage;
 
-public class StartPageViewModel : ViewModelBase
+public partial class StartPageViewModel : ObservableObject
 {
-    private ViewModelMediator _mediator;
+    private readonly ViewModelMediator _mediator;
+    private readonly PageNavigatorService _pageNavigatorService;
 
-    private ICommand _gasReportChosenCommand;
-    private ICommand _defaultReportChosenCommand;
-    private ICommand _gasAndDefaultReportChosenCommand;
-    
     public StartPageViewModel(
         ViewModelMediator mediator,
         PageNavigatorService pageNavigatorService)
     {
-        _gasReportChosenCommand = 
-            new ReportChooseCommand<GasReportBuilder>(pageNavigatorService, mediator);
-        _defaultReportChosenCommand = 
-            new ReportChooseCommand<DefaultReportBuilder>(pageNavigatorService, mediator);
-        _gasAndDefaultReportChosenCommand = 
-            new ReportChooseCommand<GasAndDefaultReportBuilder>(pageNavigatorService, mediator);
         _mediator = mediator;
+        _pageNavigatorService = pageNavigatorService;
     }
 
-    public bool NeedToReadCar { get; set; } = true;
+    [ObservableProperty]
+    private bool _needToReadCar = true;
 
-    public ICommand DefaultReportCommand => _defaultReportChosenCommand; 
+    [RelayCommand]
+    private void DefaultReport()
+    {
+        _mediator.SetReportBuilder(new DefaultReportBuilder());
+        NavigateToReportPage();
+    }
 
-    public ICommand GasReportChosenCommand => _gasReportChosenCommand; 
+    [RelayCommand]
+    private void GasReport()
+    {
+        _mediator.SetReportBuilder(new GasReportBuilder());
+        NavigateToReportPage();
+    }
 
-    public ICommand GasAndDefaultReportChosenCommand => _gasAndDefaultReportChosenCommand; 
+    [RelayCommand]
+    private void GasAndDefaultReport()
+    {
+        _mediator.SetReportBuilder(new GasAndDefaultReportBuilder());
+        NavigateToReportPage();
+    }
+
+    private void NavigateToReportPage()
+    {
+        _pageNavigatorService.NavigateTo(new ReportPage.ReportPage(
+            _mediator,
+            NeedToReadCar));
+        NeedToReadCar = false;
+    }
 }

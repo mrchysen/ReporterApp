@@ -5,11 +5,11 @@ namespace ReporterApp.WindowApp.Windows.Main.Comands;
 
 public class OpenReportSettingsPageCommand : BaseMainWindowCommand
 {
-    private PageNavigatorService _pageNavigatorService;
-    private ViewModelMediator _mediator;
+    private readonly PageNavigatorService _pageNavigatorService;
+    private readonly ViewModelMediator _mediator;
 
     public OpenReportSettingsPageCommand(
-        PageNavigatorService pageNavigatorService, 
+        PageNavigatorService pageNavigatorService,
         ViewModelMediator mediator)
     {
         _pageNavigatorService = pageNavigatorService;

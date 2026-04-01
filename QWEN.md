@@ -18,7 +18,7 @@
 | UI Framework | WPF (Windows Presentation Foundation) |
 | Язык | C# с nullable reference types |
 | Тестирование | xUnit, Moq, AutoFixture, coverlet |
-| Паттерны | MVVM (ViewModelBase, data binding) |
+| Паттерны | MVVM (ObservableObject, data binding) |
 
 ## Структура решения
 
@@ -30,7 +30,7 @@ ReporterApp/
 │   │   ├── CarEnumerator.cs   # Перебор автомобилей
 │   │   └── CarUtils.cs        # Утилиты для работы с автомобилями
 │   └── Utils/
-│       └── ViewModelBase.cs   # Базовый класс для MVVM
+│       └── ObservableObject.cs   # Базовый класс для MVVM
 │
 ├── ReporterApp.DAL/           # Data Access Layer
 │   └── FileAccess/
@@ -94,8 +94,8 @@ dotnet test --collect:"XPlat Code Coverage"
 ## Архитектурные особенности
 
 ### MVVM Паттерн
-- `ViewModelBase` в Core предоставляет базовую реализацию `INotifyPropertyChanged`
-- Модель `Car` наследуется от `ViewModelBase` для data binding
+- `ObservableObject` в Core предоставляет базовую реализацию `INotifyPropertyChanged`
+- Модель `Car` наследуется от `ObservableObject` для data binding
 - Используются свойства с уведомлением об изменении
 
 ### Конфигурация
@@ -133,7 +133,7 @@ dotnet test --collect:"XPlat Code Coverage"
 
 ### Car (модель)
 ```csharp
-public class Car : ViewModelBase
+public class Car : ObservableObject
 {
     public string Number { get; set; }
     public bool IsWorked { get; set; }

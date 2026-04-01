@@ -1,33 +1,25 @@
-﻿using DAL.FileAccess;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using DAL.FileAccess;
 using Reporter.Configuration;
-using ReporterApp.Core.Utils;
 using ReporterApp.DAL.FileAccess;
-using ReporterApp.WindowApp.Pages.NewDesign.CarNumberPage.Commands;
 using ReporterApp.WindowApp.Utils;
 using System.Windows;
+using System.Windows.Input;
 
 namespace ReporterApp.WindowApp.Pages.NewDesign.CarNumberPage;
 
-public interface ICarNumberViewModel
+public partial class CarNumberViewModel : ObservableObject
 {
-    string NumberText { get; set; }
-    
-    SaveCommand SaveCommand { get; }
+    private readonly IViewModelMediator _mediator;
+    private readonly ICarsFileWriter _carsFileWriter;
 
-    Visibility ImageVisibility { get; set; }
-}
-
-public class CarNumberViewModel : ViewModelBase, ICarNumberViewModel
-{
-    private ViewModelMediator _mediator;
-    private SaveCommand _saveCommand;
-
-    private string _numberText = string.Empty;
-    private Visibility _imageVisibility = Visibility.Hidden;
-
-    public CarNumberViewModel(ViewModelMediator mediator)
+    public CarNumberViewModel(
+        IViewModelMediator mediator,
+        ICarsFileWriter? carsFileWriter = null)
     {
         _mediator = mediator;
+        _carsFileWriter = carsFileWriter ?? new CarsFileWriter();
 
         var cars = new CarsFileReader()
                 .ReadOnlyNumbers(FilesConfiguration.GetCarsNumbersFilePath)
@@ -35,28 +27,44 @@ public class CarNumberViewModel : ViewModelBase, ICarNumberViewModel
 
         NumberText = string.Join("\r\n", cars.Select(x => x.Number));
 
-        _saveCommand = new SaveCommand(this, mediator, new CarsFileWriter());
+        SaveCommand = new RelayCommand(Save);
     }
 
-    public string NumberText
+    [ObservableProperty]
+    private string _numberText = string.Empty;
+
+    [ObservableProperty]
+    private Visibility _imageVisibility = Visibility.Hidden;
+
+    public ICommand SaveCommand { get; }
+
+    private void Save()
     {
-        get => _numberText;
-        set
-        {
-            _numberText = value;
-            NotifyPropertyChanged();
-        }
+        var carsWithNewNumbers = NumberText
+            .Split("\r\n", StringSplitOptions.RemoveEmptyEntries)
+            .Select(num => new Car() { Number = num })
+            .ToList();
+
+        MergeActualCarsWithNew(_mediator.ReportPageViewModel.Cars, carsWithNewNumbers);
+
+        _mediator.SetCars(carsWithNewNumbers, true);
+
+        var carsFileWriter = _carsFileWriter
+            .WriteCarNumbers(carsWithNewNumbers, FilesConfiguration.GetCarsNumbersFilePath);
+
+        ImageVisibility = Visibility.Visible;
     }
 
-    public SaveCommand SaveCommand => _saveCommand;
-
-    public Visibility ImageVisibility
+    private void MergeActualCarsWithNew(List<Car> oldCarsToMerge, List<Car> newCar)
     {
-        get => _imageVisibility;
-        set
+        foreach (var car in oldCarsToMerge)
         {
-            _imageVisibility = value;
-            NotifyPropertyChanged();
+            var index = newCar.FindIndex(c => c.Number == car.Number);
+
+            if (index != -1)
+            {
+                car.CloneTo(newCar[index]);
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/Элементы решения/">
     <File Path="QWEN.md" />
+    <File Path="task.md" />
   </Folder>
   <Project Path="ReporterApp.Core/ReporterApp.Core.csproj" />
   <Project Path="ReporterApp.DAL/ReporterApp.DAL.csproj" />

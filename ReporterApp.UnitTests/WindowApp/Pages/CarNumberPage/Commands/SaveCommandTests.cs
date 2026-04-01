@@ -1,30 +1,27 @@
 ﻿using Moq;
 using ReporterApp.DAL.FileAccess;
 using ReporterApp.WindowApp.Pages.NewDesign.CarNumberPage;
-using ReporterApp.WindowApp.Pages.NewDesign.CarNumberPage.Commands;
 using ReporterApp.WindowApp.Pages.NewDesign.FileManagementPage;
 using ReporterApp.WindowApp.Pages.NewDesign.ReportPage;
 using ReporterApp.WindowApp.Utils;
 
-namespace ReporterApp.UnitTests.WindowApp.Pages.CarNumberPage.Commands;
+namespace ReporterApp.UnitTests.WindowApp.Pages.CarNumberPage;
 
 public class SaveCommandTests
 {
-    private readonly Mock<ICarNumberViewModel> _carNumberViewModelMock = new();
+    private readonly Mock<ICarsFileWriter> _carsFileWriterMock = new();
     private readonly Mock<IViewModelMediator> _mediatorMock = new();
-    private readonly Mock<ICarsFileWriter> _carsFileWriter = new();
 
-    private SaveCommand _command;
+    private CarNumberViewModel _viewModel;
 
     public SaveCommandTests()
     {
         _mediatorMock.Setup(c => c.FileManagementPageViewModel)
             .Returns(new FileManagementPageViewModel());
 
-        _command = new(
-            _carNumberViewModelMock.Object,
+        _viewModel = new CarNumberViewModel(
             _mediatorMock.Object,
-            _carsFileWriter.Object);
+            _carsFileWriterMock.Object);
     }
 
     [Fact]
@@ -47,8 +44,7 @@ public class SaveCommandTests
 
         var reportVM = new ReportPageViewModel(_mediatorMock.Object, null, cars);
 
-        _carNumberViewModelMock.Setup(c => c.NumberText)
-            .Returns($"{cars[0].Number}\r\n{newCar.Number}\r\n{cars[1].Number}");
+        _viewModel.NumberText = $"{cars[0].Number}\r\n{newCar.Number}\r\n{cars[1].Number}";
 
         _mediatorMock.Setup(c => c.ReportPageViewModel)
             .Returns(reportVM);
@@ -59,7 +55,7 @@ public class SaveCommandTests
             .Callback((List<Car> c, bool _) => mergedCars.AddRange(c));
 
         // Act
-        _command.Execute(null);
+        _viewModel.SaveCommand.Execute(null);
 
         // Assert
         foreach (var car in mergedCars.Where(cars.Contains))
@@ -70,6 +66,6 @@ public class SaveCommandTests
 
         Assert.Contains(newCar.Number, mergedCars.Select(s => s.Number));
 
-        _carsFileWriter.Verify(c => c.WriteCarNumbers(It.IsAny<List<Car>>(), It.IsAny<string>()), Times.Once);
+        _carsFileWriterMock.Verify(c => c.WriteCarNumbers(It.IsAny<List<Car>>(), It.IsAny<string>()), Times.Once);
     }
 }

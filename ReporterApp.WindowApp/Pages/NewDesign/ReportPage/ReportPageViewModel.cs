@@ -1,29 +1,29 @@
-﻿using ReporterApp.Core.Cars;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using ReporterApp.Core.Cars;
 using ReporterApp.Core.Reports;
-using ReporterApp.Core.Utils;
 using ReporterApp.WindowApp.Pages.NewDesign.ReportPage.Commands;
 using ReporterApp.WindowApp.Utils;
 using System.Windows.Input;
 
 namespace ReporterApp.WindowApp.Pages.NewDesign.ReportPage;
 
-public class ReportPageViewModel : ViewModelBase
+public partial class ReportPageViewModel : ObservableObject
 {
     private readonly IViewModelMediator _mediator;
     private List<Car> _cars = null!;
     private IReportBuilder? _reportBuilder;
     private CarEnumerator _carEnumerator;
-    private string _reportText = null!;
     private DateTime _date;
 
-    private ICommand _nextCarCommand;
-    private ICommand _prevCarCommand;
-    private ICommand _workStatusChangeCommand;
-    private ICommand _changeFuelCommand;
-    private ICommand _photoAddedCommand;
-    private ICommand _change24ETStatusCommand;
-    private ICommand _changeParkingCommand;
-    private ICommand _changeAddedInfoCommand;
+    private NextCarCommand _nextCarCommand;
+    private PrevCarCommand _prevCarCommand;
+    private WorkStatusChangeCommand _workStatusChangeCommand;
+    private ChangeFuelCommand _changeFuelCommand;
+    private PhotoAddedCommand _photoAddedCommand;
+    private Change24ETStatusCommand _change24ETStatusCommand;
+    private ChangeParkingCommand _changeParkingCommand;
+    private ChangeAddedInfoCommand _changeAddedInfoCommand;
 
     public ReportPageViewModel(
         IViewModelMediator mediator,
@@ -36,14 +36,14 @@ public class ReportPageViewModel : ViewModelBase
         _carEnumerator = new(_cars ?? []);
         _mediator = mediator;
 
-        _nextCarCommand = new NextCarCommand(_carEnumerator);
-        _prevCarCommand = new PrevCarCommand(_carEnumerator);
-        _changeFuelCommand = new ChangeFuelCommand(_carEnumerator);
-        _photoAddedCommand = new PhotoAddedCommand(_carEnumerator);
-        _changeParkingCommand = new ChangeParkingCommand(_carEnumerator);
-        _changeAddedInfoCommand = new ChangeAddedInfoCommand(_carEnumerator);
-        _change24ETStatusCommand = new Change24ETStatusCommand(_carEnumerator);
-        _workStatusChangeCommand = new WorkStatusChangeCommand(_carEnumerator);
+        _nextCarCommand = new(_carEnumerator);
+        _prevCarCommand = new(_carEnumerator);
+        _changeFuelCommand = new(_carEnumerator);
+        _photoAddedCommand = new(_carEnumerator);
+        _changeParkingCommand = new(_carEnumerator);
+        _changeAddedInfoCommand = new(_carEnumerator);
+        _change24ETStatusCommand = new(_carEnumerator);
+        _workStatusChangeCommand = new(_carEnumerator);
 
         _date = _mediator.FileManagementPageViewModel.ReportDate;
 
@@ -52,7 +52,6 @@ public class ReportPageViewModel : ViewModelBase
         _mediator.FileManagementPageViewModel.PropertyChanged += (o, e) =>
         {
             _date = _mediator.FileManagementPageViewModel.ReportDate;
-
             CreateReportText();
         };
 
@@ -60,13 +59,13 @@ public class ReportPageViewModel : ViewModelBase
         {
             if (e.PropertyName == "Current")
             {
-                NotifyPropertyChanged("CurrentCarNumber");
-                NotifyPropertyChanged("IsCurrentCarWorked");
-                NotifyPropertyChanged("IsPhotoAdded");
-                NotifyPropertyChanged("Was24ETArrive");
-                NotifyPropertyChanged("WasParking");
-                NotifyPropertyChanged("AddedInfoStatus");
-                NotifyPropertyChanged("IsFueled");
+                OnPropertyChanged(nameof(CurrentCarNumber));
+                OnPropertyChanged(nameof(IsCurrentCarWorked));
+                OnPropertyChanged(nameof(IsPhotoAdded));
+                OnPropertyChanged(nameof(Was24ETArrive));
+                OnPropertyChanged(nameof(WasParking));
+                OnPropertyChanged(nameof(AddedInfoStatus));
+                OnPropertyChanged(nameof(IsFueled));
 
                 CreateReportText();
             }
@@ -84,11 +83,7 @@ public class ReportPageViewModel : ViewModelBase
     public IReportBuilder? Builder
     {
         get => _reportBuilder;
-        set
-        {
-            _reportBuilder = value;
-            CreateReportText();
-        }
+        set => SetProperty(ref _reportBuilder, value);
     }
 
     public List<Car> Cars
@@ -96,22 +91,14 @@ public class ReportPageViewModel : ViewModelBase
         get => _cars;
         set
         {
-            _cars = value;
+            SetProperty(ref _cars, value);
             _carEnumerator.Cars = _cars;
-
             CreateReportText();
         }
     }
 
-    public string ReportText
-    {
-        get => _reportText;
-        set
-        {
-            _reportText = value;
-            NotifyPropertyChanged();
-        }
-    }
+    [ObservableProperty]
+    private string _reportText = null!;
 
     public ICommand NextCarCommand => _nextCarCommand;
     public ICommand PrevCarCommand => _prevCarCommand;
