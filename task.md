@@ -13,7 +13,7 @@
 
 #### 1.1. Смешение слоёв приложения
 - **Проблема:** `CarsFileReader` в DAL использует модель `Car` из Core, но сам находится в пространстве имён `DAL.FileAccess` без интерфейса
-- **Решение:** 
+- **Решение:**
   - Выделить интерфейс `ICarsFileReader`
   - Переместить `CarsFileReader` в корректное пространство имён `ReporterApp.DAL.FileAccess`
   - Добавить регистрацию зависимостей (DI)
@@ -34,15 +34,39 @@
 
 ---
 
+## ✅ Выполненные задачи
+
+### 0. Интеграция CommunityToolkit.Mvvm
+
+#### 0.1. Добавление пакета
+- [x] Добавить `CommunityToolkit.Mvvm` в `ReporterApp.Core`
+- [x] Добавить `CommunityToolkit.Mvvm` в `ReporterApp.WindowApp`
+
+#### 0.2. Рефакторинг модели Car
+- [x] Переписать `Car.cs` с использованием `[ObservableProperty]`
+- [x] Убрать ручной бойлерплейт `INotifyPropertyChanged`
+
+#### 0.3. Рефакторинг ViewModel
+- [x] Переписать `CarNumberViewModel` с использованием `CommunityToolkit.Mvvm`
+- [x] Переписать `StartPageViewModel` с использованием `CommunityToolkit.Mvvm`
+- [x] Переписать `ReportPageViewModel` с использованием `CommunityToolkit.Mvvm`
+- [x] Переписать `FileManagementPageViewModel` с использованием `CommunityToolkit.Mvvm`
+- [x] Переписать `MainWindowViewModel` с использованием `CommunityToolkit.Mvvm`
+
+#### 0.4. Рефакторинг CarEnumerator
+- [x] Переписать `CarEnumerator.cs` с использованием `CommunityToolkit.Mvvm`
+
+---
+
 ## 🟡 Структурные улучшения
 
 ### 2. Рефакторинг Core слоя
 
 #### 2.1. Car.cs
-- [ ] Добавить валидацию свойств (DataAnnotations)
-- [ ] Реализовать `IEquatable<Car>` для сравнения по номеру
-- [ ] Добавить конструкторы для инициализации
-- [ ] Рассмотреть использование `ObservableCollection<T>` для коллекций
+- [x] Добавить валидацию свойств (DataAnnotations)
+- [x] Реализовать `IEquatable<Car>` для сравнения по номеру
+- [x] Добавить конструкторы для инициализации
+- [x] Рассмотреть использование `ObservableCollection<T>` для коллекций
 
 #### 2.2. CarUtils.cs
 - [ ] Расширить покрытие тестами
@@ -50,7 +74,7 @@
 - [ ] Рассмотреть выделение в отдельный сервис `ICarValidationService`
 
 #### 2.3. CarEnumerator.cs
-- [ ] Реализовать `IEnumerator<Car>` полноценно
+- [x] Реализовать `IEnumerator<Car>` полноценно
 - [ ] Добавить тесты на граничные условия
 
 ### 3. Рефакторинг Reports
@@ -84,9 +108,9 @@
 ### 5. ViewModel
 
 #### 5.1. Базовый класс
-- [ ] Добавить `SetProperty` метод в `ObservableObject` для уменьшения бойлерплейта
-- [ ] Добавить поддержку async команд (`AsyncRelayCommand`)
-- [ ] Рассмотреть использование CommunityToolkit.Mvvm
+- [x] Добавить `SetProperty` метод в `ObservableObject` для уменьшения бойлерплейта
+- [x] Добавить поддержку async команд (`AsyncRelayCommand`)
+- [x] Рассмотреть использование CommunityToolkit.Mvvm
 
 #### 5.2. CarNumberViewModel
 - [ ] Исправить чтение строк (`\r\n` не кроссплатформенно)
