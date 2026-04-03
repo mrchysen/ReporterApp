@@ -1,28 +1,34 @@
-﻿using Reporter.Configuration;
-using ReporterApp.DAL.FileAccess;
-using ReporterApp.WindowApp.Utils;
+﻿using ReporterApp.DAL.FileAccess;
+using ReporterApp.WindowApp.Configuration;
+using ReporterApp.WindowApp.Services;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
 
-namespace ReporterApp.WindowApp.Windows.Main.Comands;
+namespace ReporterApp.WindowApp.Windows.Main.Commands;
 
 public class SaveReportCommand : BaseMainWindowCommand
 {
-    private readonly ViewModelMediator _mediator;
+    private readonly IReportService _reportService;
+    private readonly ICarService _carService;
+    private readonly IFileManagementService _fileManagementService;
 
-    public SaveReportCommand(ViewModelMediator mediator)
+    public SaveReportCommand(
+        IReportService reportService,
+        ICarService carService,
+        IFileManagementService fileManagementService)
     {
-        _mediator = mediator;
+        _reportService = reportService;
+        _carService = carService;
+        _fileManagementService = fileManagementService;
     }
 
     public override bool CanExecute(object? parameter)
-        => _mediator.ReportPageViewModel.Builder != null;
+        => _reportService.Builder != null;
 
     public override void Execute(object? parameter)
     {
-        // code that saves car files
-        var date = _mediator.FileManagementPageViewModel.ReportDate;
+        var date = _fileManagementService.ReportDate;
 
         string directoryPath = Path.Combine(
             FilesConfiguration.GetDataFolderPath,
@@ -46,17 +52,11 @@ public class SaveReportCommand : BaseMainWindowCommand
             }
         }
 
-        var cars = _mediator.ReportPageViewModel.Cars;
+        var cars = _carService.Cars;
 
         var infoObject = new CarsFileWriter().WriteJson(cars, path);
         Debug.WriteLine(infoObject);
 
-        Clipboard.SetText(_mediator.ReportPageViewModel.ReportText);
-
-        MessageBox.Show(
-            "Файл сохранён.",
-            "Информация",
-            MessageBoxButton.OK,
-            MessageBoxImage.Warning);
+        Clipboard.SetText(_reportService.Builder!.GetReport());
     }
 }

@@ -1,9 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using DAL.FileAccess;
-using Reporter.Configuration;
 using ReporterApp.DAL.FileAccess;
-using ReporterApp.WindowApp.Utils;
+using ReporterApp.DAL.FileAccess;
+using ReporterApp.WindowApp.Configuration;
+using ReporterApp.WindowApp.Services;
 using System.Windows;
 using System.Windows.Input;
 
@@ -11,14 +11,14 @@ namespace ReporterApp.WindowApp.Pages.NewDesign.CarNumberPage;
 
 public partial class CarNumberViewModel : ObservableObject
 {
-    private readonly IViewModelMediator _mediator;
+    private readonly ICarService _carService;
     private readonly ICarsFileWriter _carsFileWriter;
 
     public CarNumberViewModel(
-        IViewModelMediator mediator,
+        ICarService carService,
         ICarsFileWriter? carsFileWriter = null)
     {
-        _mediator = mediator;
+        _carService = carService;
         _carsFileWriter = carsFileWriter ?? new CarsFileWriter();
 
         var cars = new CarsFileReader()
@@ -45,9 +45,9 @@ public partial class CarNumberViewModel : ObservableObject
             .Select(num => new Car() { Number = num })
             .ToList();
 
-        MergeActualCarsWithNew(_mediator.ReportPageViewModel.Cars, carsWithNewNumbers);
+        MergeActualCarsWithNew(_carService.Cars, carsWithNewNumbers);
 
-        _mediator.SetCars(carsWithNewNumbers, true);
+        _carService.SetCarsWithReset(carsWithNewNumbers);
 
         var carsFileWriter = _carsFileWriter
             .WriteCarNumbers(carsWithNewNumbers, FilesConfiguration.GetCarsNumbersFilePath);

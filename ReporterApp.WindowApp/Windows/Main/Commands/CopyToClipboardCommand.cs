@@ -1,23 +1,22 @@
-﻿using ReporterApp.WindowApp.Utils;
-using ReporterApp.WindowApp.Windows.Main.Comands;
+﻿using ReporterApp.WindowApp.Services;
 using System.Windows;
 
 namespace ReporterApp.WindowApp.Windows.Main.Commands;
 
 public class CopyToClipboardCommand : BaseMainWindowCommand
 {
-    private readonly ViewModelMediator _mediator;
+    private readonly IReportService _reportService;
 
-    public CopyToClipboardCommand(ViewModelMediator mediator)
+    public CopyToClipboardCommand(IReportService reportService)
     {
-        _mediator = mediator;
+        _reportService = reportService;
     }
 
     public override bool CanExecute(object? parameter)
-        => _mediator.ReportPageViewModel.Builder != null;
+        => _reportService.Builder != null;
 
     public override void Execute(object? parameter)
     {
-        Clipboard.SetText(_mediator.ReportPageViewModel.ReportText);
+        Clipboard.SetText(_reportService.Builder!.GetReport());
     }
 }

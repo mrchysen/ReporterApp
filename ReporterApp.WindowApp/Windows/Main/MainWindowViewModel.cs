@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using ReporterApp.WindowApp.Utils;
-using ReporterApp.WindowApp.Windows.Main.Comands;
+using ReporterApp.WindowApp.Navigation;
+using ReporterApp.WindowApp.Services;
 using ReporterApp.WindowApp.Windows.Main.Commands;
 using System.Windows.Input;
 
@@ -9,35 +8,31 @@ namespace ReporterApp.WindowApp.Windows.Main;
 
 public partial class MainWindowViewModel : ObservableObject
 {
-    private readonly ViewModelMediator _mediator;
-    private readonly PageNavigatorService _pageNavigatorService;
-
-    private SaveReportCommand _saveReportCommand;
-    private OpenReportSettingsPageCommand _openReportSettingsPageCommand;
-    private OpenReportPageCommand _openReportPageCommand;
-    private OpenReportCommand _openReportCommand;
-    private CopyToClipboardCommand _copyToClipboardCommand;
-    private ResetCarsCommand _resetCarsCommand;
-    private OpenStartPageCommand _openStartPageCommand;
-    private OpenCarNumberPageCommand _openCarNumberPageCommand;
-    private OpenDataFolderCommand _openDataFolderCommand;
-    private OpenConfigurationFolderCommand _openConfigurationFolderCommand;
+    private readonly SaveReportCommand _saveReportCommand;
+    private readonly OpenReportSettingsPageCommand _openReportSettingsPageCommand;
+    private readonly OpenReportPageCommand _openReportPageCommand;
+    private readonly OpenReportCommand _openReportCommand;
+    private readonly CopyToClipboardCommand _copyToClipboardCommand;
+    private readonly ResetCarsCommand _resetCarsCommand;
+    private readonly OpenStartPageCommand _openStartPageCommand;
+    private readonly OpenCarNumberPageCommand _openCarNumberPageCommand;
+    private readonly OpenDataFolderCommand _openDataFolderCommand;
+    private readonly OpenConfigurationFolderCommand _openConfigurationFolderCommand;
 
     public MainWindowViewModel(
-        ViewModelMediator mediator,
-        PageNavigatorService pageNavigatorService)
+        INavigationService navigationService,
+        IReportService reportService,
+        ICarService carService,
+        IFileManagementService fileManagementService)
     {
-        _mediator = mediator;
-        _pageNavigatorService = pageNavigatorService;
-
-        _saveReportCommand = new(_mediator);
-        _openReportSettingsPageCommand = new(_pageNavigatorService, _mediator);
-        _openReportPageCommand = new(_pageNavigatorService, _mediator);
-        _openReportCommand = new(_mediator, _pageNavigatorService);
-        _copyToClipboardCommand = new(_mediator);
-        _resetCarsCommand = new(_mediator);
-        _openStartPageCommand = new(_pageNavigatorService, _mediator);
-        _openCarNumberPageCommand = new(_mediator, _pageNavigatorService);
+        _saveReportCommand = new(reportService, carService, fileManagementService);
+        _openReportSettingsPageCommand = new(navigationService, reportService);
+        _openReportPageCommand = new(navigationService, reportService);
+        _openReportCommand = new(carService, fileManagementService, navigationService);
+        _copyToClipboardCommand = new(reportService);
+        _resetCarsCommand = new(carService);
+        _openStartPageCommand = new(navigationService, reportService, carService);
+        _openCarNumberPageCommand = new(navigationService);
         _openDataFolderCommand = new();
         _openConfigurationFolderCommand = new();
     }
@@ -52,13 +47,4 @@ public partial class MainWindowViewModel : ObservableObject
     public ICommand OpenCarNumberPageCommand => _openCarNumberPageCommand;
     public ICommand OpenDataFolderCommand => _openDataFolderCommand;
     public ICommand OpenConfigurationFolderCommand => _openConfigurationFolderCommand;
-
-    public void RaiseCanExecuteChanged()
-    {
-        _openReportSettingsPageCommand.RaiseCanExecuteChanged();
-        _openReportPageCommand.RaiseCanExecuteChanged();
-        _copyToClipboardCommand.RaiseCanExecuteChanged();
-        _openStartPageCommand.RaiseCanExecuteChanged();
-        _saveReportCommand.RaiseCanExecuteChanged();
-    }
 }

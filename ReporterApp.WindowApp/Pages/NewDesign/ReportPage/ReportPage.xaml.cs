@@ -1,27 +1,32 @@
-﻿using DAL.FileAccess;
-using Reporter.Configuration;
-using ReporterApp.WindowApp.Utils;
+﻿using ReporterApp.DAL.FileAccess;
+using ReporterApp.WindowApp.Configuration;
+using ReporterApp.WindowApp.Navigation;
 using System.Windows.Controls;
 
 namespace ReporterApp.WindowApp.Pages.NewDesign.ReportPage;
 
-public partial class ReportPage : Page
+public partial class ReportPage : Page, IPageWithParameter
 {
-    public ReportPage(ViewModelMediator mediator, bool needToReadCars = true)
+    private readonly ReportPageViewModel _viewModel;
+
+    public ReportPage(ReportPageViewModel viewModel)
     {
         InitializeComponent();
+        _viewModel = viewModel;
+        DataContext = viewModel;
 
-        if (needToReadCars)
+        CarIteratorComponent.DataContext = DataContext;
+    }
+
+    public void SetParameter(object? parameter)
+    {
+        if (parameter is bool needToReadCars && needToReadCars)
         {
             var cars = new CarsFileReader()
                 .ReadOnlyNumbers(FilesConfiguration.GetCarsNumbersFilePath)
                 .Cars ?? [];
 
-            mediator.SetCars(cars);
+            _viewModel.Cars = cars;
         }
-
-        DataContext = mediator.ReportPageViewModel;
-
-        CarIteratorComponent.DataContext = DataContext;
     }
 }

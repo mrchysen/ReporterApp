@@ -1,15 +1,12 @@
-﻿using ReporterApp.WindowApp.Utils;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 namespace ReporterApp.WindowApp.Pages.NewDesign.FileManagementPage;
 
 public partial class FileManagementPage : Page
 {
-    public FileManagementPage(
-        ViewModelMediator mediator)
+    public FileManagementPage(FileManagementPageViewModel viewModel)
     {
         InitializeComponent();
-
-        DataContext = mediator.FileManagementPageViewModel;
+        DataContext = viewModel;
     }
 }

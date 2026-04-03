@@ -1,30 +1,35 @@
-﻿using DAL.FileAccess;
+﻿using ReporterApp.DAL.FileAccess;
 using Microsoft.Win32;
-using Reporter.Configuration;
-using ReporterApp.WindowApp.Pages.NewDesign.StartPage;
-using ReporterApp.WindowApp.Utils;
+using ReporterApp.WindowApp.Configuration;
+using ReporterApp.WindowApp.Navigation;
+using ReporterApp.WindowApp.Services;
 using System.Diagnostics;
 
-namespace ReporterApp.WindowApp.Windows.Main.Comands;
+namespace ReporterApp.WindowApp.Windows.Main.Commands;
 
 public class OpenReportCommand : BaseMainWindowCommand
 {
-    private ViewModelMediator _mediator;
-    private PageNavigatorService _pageNavigatorService;
+    private readonly ICarService _carService;
+    private readonly IFileManagementService _fileManagementService;
+    private readonly INavigationService _navigationService;
 
     public OpenReportCommand(
-        ViewModelMediator mediator, 
-        PageNavigatorService pageNavigatorService)
+        ICarService carService,
+        IFileManagementService fileManagementService,
+        INavigationService navigationService)
     {
-        _mediator = mediator;
-        _pageNavigatorService = pageNavigatorService;
+        _carService = carService;
+        _fileManagementService = fileManagementService;
+        _navigationService = navigationService;
     }
 
     public override void Execute(object? parameter)
     {
-        OpenFileDialog fileDialog = new();
-        fileDialog.InitialDirectory = FilesConfiguration.GetDataFolderPath;
-        fileDialog.Filter = "(*.json)|*.json|All files (*.*)|*.*";
+        OpenFileDialog fileDialog = new()
+        {
+            InitialDirectory = FilesConfiguration.GetDataFolderPath,
+            Filter = "(*.json)|*.json|All files (*.*)|*.*"
+        };
 
         if (fileDialog.ShowDialog() == true)
         {
@@ -34,12 +39,10 @@ public class OpenReportCommand : BaseMainWindowCommand
 
             Debug.WriteLine(result);
 
-            _mediator.SetCars(result.Cars);
-            _mediator.SetOpenReportStatus(needToReadCar: false);
-            _mediator.SetDate(ParseDateFromFilePath(filePath));
+            _carService.SetCarsWithReset(result.Cars);
+            _fileManagementService.ReportDate = ParseDateFromFilePath(filePath);
 
-            _pageNavigatorService.NavigateTo(
-                new StartPage(_mediator));
+            _navigationService.NavigateTo<Pages.NewDesign.StartPage.StartPage>(false);
         }
     }
 

@@ -1,28 +1,27 @@
-﻿using ReporterApp.WindowApp.Pages.NewDesign.StartPage;
-using ReporterApp.WindowApp.Utils;
-using ReporterApp.WindowApp.Windows.Main.Comands;
+﻿using ReporterApp.WindowApp.Navigation;
+using ReporterApp.WindowApp.Services;
 
 namespace ReporterApp.WindowApp.Windows.Main.Commands;
 
 public class OpenStartPageCommand : BaseMainWindowCommand
 {
-    private PageNavigatorService _pageNavigationService;
-    private ViewModelMediator _mediator;
+    private readonly INavigationService _navigationService;
+    private readonly IReportService _reportService;
+    private readonly ICarService _carService;
 
-    public OpenStartPageCommand(PageNavigatorService pageNavigationService, ViewModelMediator mediator)
+    public OpenStartPageCommand(
+        INavigationService navigationService,
+        IReportService reportService,
+        ICarService carService)
     {
-        _pageNavigationService = pageNavigationService;
-        _mediator = mediator;
+        _navigationService = navigationService;
+        _reportService = reportService;
+        _carService = carService;
     }
 
     public override void Execute(object? parameter)
     {
-        if(_mediator.ReportPageViewModel.Builder == null)
-        {
-            _mediator.SetOpenReportStatus();
-        }
-        
-        _pageNavigationService.NavigateTo(
-            new StartPage(_mediator));
+        var needToReadCar = _carService.Cars.Count == 0 || _reportService.Builder == null;
+        _navigationService.NavigateTo<Pages.NewDesign.StartPage.StartPage>(needToReadCar);
     }
 }

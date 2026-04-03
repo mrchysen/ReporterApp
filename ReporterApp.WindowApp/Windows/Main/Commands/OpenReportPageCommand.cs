@@ -1,27 +1,26 @@
-﻿using ReporterApp.WindowApp.Pages.NewDesign.ReportPage;
-using ReporterApp.WindowApp.Utils;
+﻿using ReporterApp.WindowApp.Navigation;
+using ReporterApp.WindowApp.Services;
 
-namespace ReporterApp.WindowApp.Windows.Main.Comands;
+namespace ReporterApp.WindowApp.Windows.Main.Commands;
 
 public class OpenReportPageCommand : BaseMainWindowCommand
 {
-    private PageNavigatorService _pageNavigatorService;
-    private ViewModelMediator _mediator;
+    private readonly INavigationService _navigationService;
+    private readonly IReportService _reportService;
 
     public OpenReportPageCommand(
-        PageNavigatorService pageNavigatorService,
-        ViewModelMediator mediator)
+        INavigationService navigationService,
+        IReportService reportService)
     {
-        _pageNavigatorService = pageNavigatorService;
-        _mediator = mediator;
+        _navigationService = navigationService;
+        _reportService = reportService;
     }
 
     public override bool CanExecute(object? parameter)
-        => _mediator.ReportPageViewModel.Builder != null;
+        => _reportService.Builder != null;
 
     public override void Execute(object? parameter)
     {
-        _pageNavigatorService.NavigateTo(
-            new ReportPage(_mediator, false));
+        _navigationService.NavigateTo<Pages.NewDesign.ReportPage.ReportPage>(false);
     }
 }

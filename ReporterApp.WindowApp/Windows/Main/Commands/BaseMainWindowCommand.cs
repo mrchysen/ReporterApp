@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 
-namespace ReporterApp.WindowApp.Windows.Main.Comands;
+namespace ReporterApp.WindowApp.Windows.Main.Commands;
 
 public abstract class BaseMainWindowCommand : ICommand
 {

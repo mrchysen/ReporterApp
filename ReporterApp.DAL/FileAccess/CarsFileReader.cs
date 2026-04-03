@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace DAL.FileAccess;
+namespace ReporterApp.DAL.FileAccess;
 
 public class CarsFileReader
 {

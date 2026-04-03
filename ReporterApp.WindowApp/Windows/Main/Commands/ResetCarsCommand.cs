@@ -1,17 +1,16 @@
-﻿using DAL.FileAccess;
-using Reporter.Configuration;
-using ReporterApp.WindowApp.Utils;
-using ReporterApp.WindowApp.Windows.Main.Comands;
+﻿using ReporterApp.DAL.FileAccess;
+using ReporterApp.WindowApp.Configuration;
+using ReporterApp.WindowApp.Services;
 
 namespace ReporterApp.WindowApp.Windows.Main.Commands;
 
 public class ResetCarsCommand : BaseMainWindowCommand
 {
-    private ViewModelMediator _mediator;
+    private readonly ICarService _carService;
 
-    public ResetCarsCommand(ViewModelMediator mediator)
+    public ResetCarsCommand(ICarService carService)
     {
-        _mediator = mediator;
+        _carService = carService;
     }
 
     public override void Execute(object? parameter)
@@ -20,7 +19,6 @@ public class ResetCarsCommand : BaseMainWindowCommand
             .ReadOnlyNumbers(FilesConfiguration.GetCarsNumbersFilePath)
             .Cars ?? [];
 
-        _mediator.SetCars(cars);
-        _mediator.ReportPageViewModel.ResetCarInEnumerator();
+        _carService.SetCarsWithReset(cars);
     }
 }

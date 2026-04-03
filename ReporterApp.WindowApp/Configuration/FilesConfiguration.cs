@@ -1,7 +1,7 @@
 ﻿using ReporterApp.WindowApp;
 using System.IO;
 
-namespace Reporter.Configuration;
+namespace ReporterApp.WindowApp.Configuration;
 
 public static class FilesConfiguration
 {

@@ -1,14 +1,24 @@
-﻿using ReporterApp.WindowApp.Utils;
+﻿using ReporterApp.WindowApp.Navigation;
 using System.Windows.Controls;
 
 namespace ReporterApp.WindowApp.Pages.NewDesign.StartPage;
 
-public partial class StartPage : Page
+public partial class StartPage : Page, IPageWithParameter
 {
-    public StartPage(ViewModelMediator Mediator)
+    private readonly StartPageViewModel _viewModel;
+
+    public StartPage(StartPageViewModel viewModel)
     {
         InitializeComponent();
+        _viewModel = viewModel;
+        DataContext = viewModel;
+    }
 
-        DataContext = Mediator.StartPageViewModel;
+    public void SetParameter(object? parameter)
+    {
+        if (parameter is bool needToReadCar)
+        {
+            _viewModel.NeedToReadCar = needToReadCar;
+        }
     }
 }

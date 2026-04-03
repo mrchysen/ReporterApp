@@ -1,6 +1,4 @@
-﻿using Reporter.Configuration;
-using Reporter.Logic.Configuration;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
 using System.Windows;

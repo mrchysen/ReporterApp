@@ -1,20 +1,18 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using ReporterApp.Core.Cars;
 using ReporterApp.Core.Reports;
 using ReporterApp.WindowApp.Pages.NewDesign.ReportPage.Commands;
-using ReporterApp.WindowApp.Utils;
+using ReporterApp.WindowApp.Services;
 using System.Windows.Input;
 
 namespace ReporterApp.WindowApp.Pages.NewDesign.ReportPage;
 
 public partial class ReportPageViewModel : ObservableObject
 {
-    private readonly IViewModelMediator _mediator;
-    private List<Car> _cars = null!;
-    private IReportBuilder? _reportBuilder;
+    private readonly ICarService _carService;
+    private readonly IReportService _reportService;
+    private readonly IFileManagementService _fileManagementService;
     private CarEnumerator _carEnumerator;
-    private DateTime _date;
 
     private NextCarCommand _nextCarCommand;
     private PrevCarCommand _prevCarCommand;
@@ -26,16 +24,16 @@ public partial class ReportPageViewModel : ObservableObject
     private ChangeAddedInfoCommand _changeAddedInfoCommand;
 
     public ReportPageViewModel(
-        IViewModelMediator mediator,
-        IReportBuilder? reportBuilder = null,
-        List<Car>? cars = null)
+        ICarService carService,
+        IReportService reportService,
+        IFileManagementService fileManagementService)
     {
-        _reportBuilder = reportBuilder;
+        _carService = carService;
+        _reportService = reportService;
+        _fileManagementService = fileManagementService;
 
-        _cars = cars ?? [];
-        _carEnumerator = new(_cars ?? []);
-        _mediator = mediator;
-
+        _carEnumerator = new(_carService.Cars);
+        
         _nextCarCommand = new(_carEnumerator);
         _prevCarCommand = new(_carEnumerator);
         _changeFuelCommand = new(_carEnumerator);
@@ -45,14 +43,14 @@ public partial class ReportPageViewModel : ObservableObject
         _change24ETStatusCommand = new(_carEnumerator);
         _workStatusChangeCommand = new(_carEnumerator);
 
-        _date = _mediator.FileManagementPageViewModel.ReportDate;
-
         CreateReportText();
 
-        _mediator.FileManagementPageViewModel.PropertyChanged += (o, e) =>
+        _fileManagementService.PropertyChanged += (o, e) =>
         {
-            _date = _mediator.FileManagementPageViewModel.ReportDate;
-            CreateReportText();
+            if (e.PropertyName == nameof(IFileManagementService.ReportDate))
+            {
+                CreateReportText();
+            }
         };
 
         _carEnumerator.PropertyChanged += (o, e) =>
@@ -82,17 +80,17 @@ public partial class ReportPageViewModel : ObservableObject
 
     public IReportBuilder? Builder
     {
-        get => _reportBuilder;
-        set => SetProperty(ref _reportBuilder, value);
+        get => _reportService.Builder;
+        set => _reportService.SetBuilder(value);
     }
 
     public List<Car> Cars
     {
-        get => _cars;
+        get => _carService.Cars;
         set
         {
-            SetProperty(ref _cars, value);
-            _carEnumerator.Cars = _cars;
+            _carService.Cars = value;
+            _carEnumerator.Cars = value;
             CreateReportText();
         }
     }
@@ -113,8 +111,8 @@ public partial class ReportPageViewModel : ObservableObject
 
     private void CreateReportText()
     {
-        ReportText = _reportBuilder?
-            .AddBodyReportText(_cars, _date, true)
+        ReportText = _reportService.Builder?
+            .AddBodyReportText(_carService.Cars, _fileManagementService.ReportDate, true)
             .GetReport()!;
     }
 }

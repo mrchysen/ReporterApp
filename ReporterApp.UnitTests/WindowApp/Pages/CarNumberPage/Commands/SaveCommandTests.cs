@@ -1,26 +1,24 @@
 ﻿using Moq;
+using ReporterApp.Core.Cars;
 using ReporterApp.DAL.FileAccess;
 using ReporterApp.WindowApp.Pages.NewDesign.CarNumberPage;
-using ReporterApp.WindowApp.Pages.NewDesign.FileManagementPage;
-using ReporterApp.WindowApp.Pages.NewDesign.ReportPage;
-using ReporterApp.WindowApp.Utils;
+using ReporterApp.WindowApp.Services;
 
-namespace ReporterApp.UnitTests.WindowApp.Pages.CarNumberPage;
+namespace ReporterApp.UnitTests.WindowApp.Pages.CarNumberPage.Commands;
 
 public class SaveCommandTests
 {
     private readonly Mock<ICarsFileWriter> _carsFileWriterMock = new();
-    private readonly Mock<IViewModelMediator> _mediatorMock = new();
+    private readonly Mock<ICarService> _carServiceMock = new();
 
     private CarNumberViewModel _viewModel;
 
     public SaveCommandTests()
     {
-        _mediatorMock.Setup(c => c.FileManagementPageViewModel)
-            .Returns(new FileManagementPageViewModel());
+        _carServiceMock.Setup(c => c.Cars).Returns(new List<Car>());
 
         _viewModel = new CarNumberViewModel(
-            _mediatorMock.Object,
+            _carServiceMock.Object,
             _carsFileWriterMock.Object);
     }
 
@@ -42,17 +40,13 @@ public class SaveCommandTests
             Number = "2"
         };
 
-        var reportVM = new ReportPageViewModel(_mediatorMock.Object, null, cars);
-
+        _carServiceMock.Setup(c => c.Cars).Returns(cars);
         _viewModel.NumberText = $"{cars[0].Number}\r\n{newCar.Number}\r\n{cars[1].Number}";
-
-        _mediatorMock.Setup(c => c.ReportPageViewModel)
-            .Returns(reportVM);
 
         List<Car> mergedCars = new();
 
-        _mediatorMock.Setup(c => c.SetCars(It.IsAny<List<Car>>(), It.IsAny<bool>()))
-            .Callback((List<Car> c, bool _) => mergedCars.AddRange(c));
+        _carServiceMock.Setup(c => c.SetCarsWithReset(It.IsAny<List<Car>>()))
+            .Callback((List<Car> c) => mergedCars.AddRange(c));
 
         // Act
         _viewModel.SaveCommand.Execute(null);

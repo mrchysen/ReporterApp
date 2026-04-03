@@ -1,26 +1,18 @@
-﻿using ReporterApp.WindowApp.Pages.NewDesign.CarNumberPage;
-using ReporterApp.WindowApp.Utils;
-using ReporterApp.WindowApp.Windows.Main.Comands;
+﻿using ReporterApp.WindowApp.Navigation;
 
 namespace ReporterApp.WindowApp.Windows.Main.Commands;
 
 public class OpenCarNumberPageCommand : BaseMainWindowCommand
 {
-    private ViewModelMediator _mediator;
-    private PageNavigatorService _pageNavigatorService;
+    private readonly INavigationService _navigationService;
 
-    public OpenCarNumberPageCommand(
-        ViewModelMediator mediator, 
-        PageNavigatorService pageNavigatorService)
+    public OpenCarNumberPageCommand(INavigationService navigationService)
     {
-        _mediator = mediator;
-        _pageNavigatorService = pageNavigatorService;
+        _navigationService = navigationService;
     }
 
     public override void Execute(object? parameter)
     {
-        //_mediator.CarNumberViewModel = new();
-
-        _pageNavigatorService.NavigateTo(new CarNumberPage(_mediator));
+        _navigationService.NavigateTo<Pages.NewDesign.CarNumberPage.CarNumberPage>();
     }
 }

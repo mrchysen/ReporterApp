@@ -1,4 +1,4 @@
-﻿namespace DAL.FileAccess;
+﻿namespace ReporterApp.DAL.FileAccess;
 
 public class CarsOperationInfo
 {

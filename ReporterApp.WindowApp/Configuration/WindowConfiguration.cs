@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Reporter.Logic.Configuration;
+namespace ReporterApp.WindowApp.Configuration;
 
 public class WindowConfiguration
 {
