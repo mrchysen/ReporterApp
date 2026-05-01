@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DAL.FileAccess;
-using Reporter.Configuration;
+using ReporterApp.DAL;
 using ReporterApp.DAL.FileAccess;
 using ReporterApp.WindowApp.Utils;
 using System.Windows;

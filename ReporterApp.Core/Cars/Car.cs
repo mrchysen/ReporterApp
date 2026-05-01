@@ -28,14 +28,14 @@ public partial class Car : ObservableObject
 
     public Car CloneTo(Car car)
     {
-        car.Number = _number;
-        car.IsWorked = _isWorked;
-        car.FuelBegin = _fuelBegin;
-        car.FuelEnd = _fuelEnd;
-        car.WasScreen = _wasScreen;
-        car.Was24kmET = _was24kmET;
-        car.Parking = [.. _parking];
-        car.AddInformation = [.. _addInformation];
+        car.Number = Number;
+        car.IsWorked = IsWorked;
+        car.FuelBegin = FuelBegin;
+        car.FuelEnd = FuelEnd;
+        car.WasScreen = WasScreen;
+        car.Was24kmET = Was24kmET;
+        car.Parking = [.. Parking];
+        car.AddInformation = [.. AddInformation];
 
         return car;
     }

@@ -1,5 +1,5 @@
-﻿using Reporter.Configuration;
-using Reporter.Logic.Configuration;
+﻿using Reporter.Logic.Configuration;
+using ReporterApp.DAL;
 using System.Diagnostics;
 using System.IO;
 using System.Text.Json;

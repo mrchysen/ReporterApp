@@ -1,6 +1,6 @@
 ﻿using DAL.FileAccess;
 using Microsoft.Win32;
-using Reporter.Configuration;
+using ReporterApp.DAL;
 using ReporterApp.WindowApp.Pages.NewDesign.StartPage;
 using ReporterApp.WindowApp.Utils;
 using System.Diagnostics;

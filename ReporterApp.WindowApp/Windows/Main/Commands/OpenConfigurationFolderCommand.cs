@@ -1,4 +1,4 @@
-﻿using Reporter.Configuration;
+﻿using ReporterApp.DAL;
 using ReporterApp.WindowApp.Windows.Main.Comands;
 using System.Diagnostics;
 using System.IO;

@@ -1,7 +1,6 @@
-﻿using ReporterApp.WindowApp;
-using System.IO;
+﻿using ReporterApp.Core;
 
-namespace Reporter.Configuration;
+namespace ReporterApp.DAL;
 
 public static class FilesConfiguration
 {
@@ -16,7 +15,7 @@ public static class FilesConfiguration
     /// </summary>
     public static string GetCarsNumbersFilePath 
         => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                        App.ApplicationName,
+                        AppConsts.ApplicationName,
                         _dataFolder, 
                         _carsNumbersFileName);
 
@@ -25,7 +24,7 @@ public static class FilesConfiguration
     /// </summary>
     public static string GetDataFolderPath
         => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                        App.ApplicationName,
+                        AppConsts.ApplicationName,
                         _dataFolder);
 
     /// <summary>
@@ -33,7 +32,7 @@ public static class FilesConfiguration
     /// </summary>
     public static string GetWindowConfigurationFilePath
         => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                        App.ApplicationName,
+                        AppConsts.ApplicationName,
                         _windowConfigurationFileName);
 
     /// <summary>
@@ -41,5 +40,5 @@ public static class FilesConfiguration
     /// </summary>
     public static string GetConfigurationFolderPath
         => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                        App.ApplicationName);
+                        AppConsts.ApplicationName);
 }

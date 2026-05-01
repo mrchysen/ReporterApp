@@ -1,5 +1,5 @@
-﻿using Reporter.Configuration;
-using Reporter.Logic.Configuration;
+﻿using Reporter.Logic.Configuration;
+using ReporterApp.DAL;
 using ReporterApp.WindowApp.Configuration;
 using ReporterApp.WindowApp.Windows.Main;
 using System.Diagnostics;
@@ -13,8 +13,6 @@ public partial class App : Application
     private readonly MainWindowConfigurationService 
         _mainWindowConfigurationService = new();
     private MainWindow _mainWindow = null!;
-
-    public const string ApplicationName = "ReporterApp";
 
     protected override void OnStartup(StartupEventArgs e)
     {

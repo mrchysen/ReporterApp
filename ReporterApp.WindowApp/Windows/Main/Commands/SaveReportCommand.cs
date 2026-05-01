@@ -1,4 +1,4 @@
-﻿using Reporter.Configuration;
+﻿using ReporterApp.DAL;
 using ReporterApp.DAL.FileAccess;
 using ReporterApp.WindowApp.Utils;
 using System.Diagnostics;
